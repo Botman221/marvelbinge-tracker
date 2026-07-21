@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MarvelBinge Tracker — filmy i seriale Marvela</title>
-<meta name="description" content="Interaktywna checklista wszystkich filmów i seriali Marvela przed Avengers: Doomsday (18.12.2026). Interactive Marvel watchlist tracker for Avengers: Doomsday. PL/EN.">
-<meta property="og:title" content="Droga do Doomsday — Marvel watchlist tracker">
-<meta property="og:description" content="144 filmy, seriale i shorty Marvela w trzech kolejnościach, z licznikiem godzin do premiery. 144 Marvel titles, three viewing orders, live hour counter. PL/EN.">
+<meta name="description" content="MarvelBinge Tracker — interaktywny tracker wszystkich 224 filmów i seriali ze świata Marvela, w trzech kolejnościach oglądania, z trybem bez spoilerów. Interactive watchlist tracker for every Marvel movie & series. PL/EN. Projekt fanowski, niepowiązany z Marvel/Disney.">
+<meta property="og:title" content="MarvelBinge Tracker — filmy i seriale Marvela">
+<meta property="og:description" content="224 filmy, seriale i shorty ze świata Marvela w trzech kolejnościach, z licznikiem do Avengers: Doomsday. 224 titles, three viewing orders, spoiler-safe mode, live countdown. PL/EN.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
 <style>
@@ -90,6 +90,10 @@
     font-size:1.5rem;color:var(--zloto);line-height:1.1;
   }
   .countcard span{font-size:.74rem;color:var(--stal);text-transform:uppercase;letter-spacing:.08em}
+  .target-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .target-lbl{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:.76rem;color:var(--stal)}
+  .target-sel,.target-date{background:var(--panel);color:var(--biel);border:1px solid var(--linia);border-radius:8px;padding:7px 10px;font-family:'Barlow',sans-serif;font-size:.86rem;cursor:pointer}
+  .target-sel:focus-visible,.target-date:focus-visible{outline:2px solid var(--zloto);outline-offset:2px}
   .progress-outer{margin-top:14px;background:var(--panel);border:1px solid var(--linia);border-radius:999px;height:14px;overflow:hidden}
   .progress-inner{height:100%;width:0%;background:linear-gradient(90deg,var(--krew),var(--zloto));border-radius:999px;transition:width .5s ease}
   .progress-label{font-size:.8rem;color:var(--stal);margin-top:6px}
@@ -193,20 +197,44 @@
   .chip.preset{border-color:var(--zloto);color:var(--biel)}
   .notebtn{background:none;border:1px dashed var(--linia);color:var(--stal);border-radius:6px;padding:3px 10px;font-size:.76rem;cursor:pointer;margin-top:6px;font-family:inherit}
   .notebtn:hover{color:var(--biel);border-color:var(--stal)}
+  .disc-modal[hidden]{display:none}
+  .disc-modal{position:fixed;inset:0;z-index:200;background:rgba(6,10,18,.82);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px}
+  .disc-box{position:relative;background:var(--panel);border:1px solid var(--linia);border-top:3px solid var(--krew);border-radius:14px;max-width:460px;padding:22px 22px 18px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+  .disc-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--zloto);font-size:1rem;margin-bottom:10px}
+  .disc-text{color:var(--stal);font-size:.9rem;line-height:1.5}
+  .disc-ok{margin-top:16px;width:100%;background:var(--krew);border:0;color:#fff;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1rem;letter-spacing:.06em;text-transform:uppercase;padding:11px;border-radius:9px;cursor:pointer}
+  .disc-ok:hover{filter:brightness(1.08)}
+  .disc-lang{position:absolute;top:14px;right:14px;background:var(--panel2);border:1px solid var(--linia);color:var(--stal);border-radius:7px;padding:4px 10px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em;font-size:.78rem;cursor:pointer}
+  .disc-lang:hover{color:var(--biel);border-color:var(--stal)}
+  .disc-title{padding-right:52px}
 </style>
 </head>
 <body>
+
+<div id="disc-modal" class="disc-modal" role="dialog" aria-modal="true" hidden>
+  <div class="disc-box">
+    <button class="disc-lang" id="disc-lang" aria-label="Język / language">EN</button>
+    <div class="disc-title" id="disc-title">Zanim zaczniesz</div>
+    <p class="disc-text" id="disc-text">MarvelBinge Tracker to niekomercyjny projekt fanowski.</p>
+    <button class="disc-ok" id="disc-ok">OK, rozumiem</button>
+  </div>
+</div>
 
 <header class="hero">
   <div class="wrap">
     <button id="langbtn" class="langbtn" aria-label="Przełącz język / switch language">EN</button>
     <div class="eyebrow" id="t-eyebrow">Cel: Avengers: Doomsday · kina · 18 grudnia 2026</div>
-    <h1 id="t-h1">Marvel<span class="red">Binge</span> Tracker</h1>
+    <h1 id="t-h1">Droga do <span class="red">Doomsday</span></h1>
     <p class="hero-sub" id="t-sub">Odhaczaj, co już za Tobą. Wybierz kolejność i pakiety spoza MCU — licznik godzin i tempo tygodniowe przeliczą się same. Postęp zapisuje się automatycznie.</p>
     <div class="countrow">
       <div class="countcard"><b id="cd-days">—</b><span id="lbl-days">dni do premiery</span></div>
       <div class="countcard"><b id="cd-weeks">—</b><span id="lbl-weeks">pełnych tygodni</span></div>
       <div class="countcard"><b id="cd-pace">—</b><span id="lbl-pace">godz./tydzień, by zdążyć</span></div>
+    </div>
+    <div class="target-row">
+      <span class="target-lbl" id="t-target">Odliczaj do:</span>
+      <select id="target-sel" class="target-sel"></select>
+      <input type="date" id="target-date" class="target-date" hidden>
     </div>
     <div class="progress-outer"><div class="progress-inner" id="pbar"></div></div>
     <div class="progress-label" id="plabel">Wczytywanie…</div>
@@ -771,10 +799,11 @@ const UP_EN = { x97b:"airing until Aug 12", smbnd:"THEATERS · Jul 31, 2026", vq
 const UI = {
  pl:{
   title:"MarvelBinge Tracker — filmy i seriale Marvela",
-  eyebrow:"Cel: Avengers: Doomsday · kina · 18 grudnia 2026",
-  h1:'MarvelBinge <span class="red">Tracker</span>',
+  eyebrow:"Twój przewodnik po całym świecie Marvela",
+  h1:'Marvel<span class="red">Binge</span> Tracker',
   sub:"Odhaczaj, co już za Tobą. Wybierz kolejność i pakiety spoza MCU — licznik godzin i tempo tygodniowe przeliczą się same. Postęp zapisuje się automatycznie w tej przeglądarce.",
-  lblDays:"dni do premiery", lblWeeks:"pełnych tygodni", lblPace:"godz./tydzień, by zdążyć",
+  lblDays:"dni do celu", lblWeeks:"pełnych tygodni", lblPace:"godz./tydzień, by zdążyć",
+  targetTo:"Odliczaj do:", customLabel:"własna data", customTitle:"Wybierz datę",
   order:"Kolejność oglądania", packs:"Pakiety (włącz / wyłącz)", filters:"Filtry",
   modeRec:"Polecana", modePrem:"Premiery", modeChr:"Chronologia",
   hintRec:"Kolejność premier MCU + pakiety wpięte tam, gdzie dają najwięcej frajdy.",
@@ -782,22 +811,24 @@ const UI = {
   hintChr:"Według wewnętrznej osi czasu — uwaga, ta kolejność zdradza część niespodzianek.",
   fstar:"Pokaż tylko kluczowe przed Doomsday (★)", fhide:"Ukryj już obejrzane",
   empty:"Nic tu nie ma — włącz jakiś pakiet albo wyłącz filtry.",
-  footer:"Czasy trwania są przybliżone. Daty przyszłych premier mogą się zmienić — stan na lipiec 2026.",
+  footer:"Czasy trwania są przybliżone; daty przyszłych premier mogą się zmienić (stan na lipiec 2026). MarvelBinge Tracker to niekomercyjny projekt fanowski. Nie jest powiązany z Marvel Studios, The Walt Disney Company ani żadnym powiązanym podmiotem, nie jest przez nie wspierany ani autoryzowany. Wszystkie nazwy, tytuły i znaki towarowe należą do ich właścicieli i użyto ich wyłącznie w celach informacyjnych. Autor nie czerpie z projektu żadnych dochodów.",
   reset:"Wyczyść postęp", confirmReset:"Wyczyścić cały zapisany postęp (odhaczenia)?",
   ariaWatched:"Obejrzane: ", chipItems:"poz.",
   presets:"Szybkie zestawy", psMcu:"Samo MCU", psConn:"Wszystko powiązane", psAll:"Absolutnie wszystko",
   notesTitle:"Notki przy pozycjach", nOff:"Schowane", nClick:"Na klik", nAll:"Widoczne", showNote:"ⓘ pokaż notkę",
   nHintOff:"Czysta lista — zero opisów.", nHintClick:"Odkrywasz pojedynczo — bezpiecznie od spoilerów.", nHintAll:"Wszystko widoczne — opisy mogą zdradzać niespodzianki.",
+  discTitle:"Zanim zaczniesz", discOk:"OK, rozumiem", discText:"MarvelBinge Tracker to niekomercyjny projekt fanowski — pomoc w ogarnięciu, co i w jakiej kolejności obejrzeć. Nie jest powiązany z Marvel Studios ani The Walt Disney Company, nie jest przez nie autoryzowany, a autor nie czerpie z niego żadnych dochodów. Wszystkie nazwy i znaki towarowe należą do ich właścicieli.",
   progress:function(a,b,p,x,y){return "Obejrzane: "+a+" z "+b+" pozycji ("+p+"%) · "+x+" h z ~"+y+" h w wybranych pakietach";},
   sumMain:function(r,p){return "Zostało <b>"+r+" h</b> · tempo: <b>"+p+" h/tydz.</b>";},
-  sumSub:function(d,n){return d+" dni do Doomsday · "+n+" pozycji w planie";}
+  sumSub:function(d,n,g){return d+" dni do: "+g+" · "+n+" pozycji w planie";}
  },
  en:{
   title:"MarvelBinge Tracker — a Marvel watchlist",
-  eyebrow:"Target: Avengers: Doomsday · theaters · December 18, 2026",
-  h1:'MarvelBinge <span class="red">Tracker</span>',
+  eyebrow:"Your guide through the entire Marvel universe",
+  h1:'Marvel<span class="red">Binge</span> Tracker',
   sub:"Check off what you've watched. Pick an order and toggle the non-MCU packs — the hour counter and weekly pace update on their own. Progress saves automatically in this browser.",
-  lblDays:"days to release", lblWeeks:"full weeks", lblPace:"hours/week to make it",
+  lblDays:"days to target", lblWeeks:"full weeks", lblPace:"hours/week to make it",
+  targetTo:"Counting down to:", customLabel:"custom date", customTitle:"Pick a date",
   order:"Viewing order", packs:"Packs (toggle on / off)", filters:"Filters",
   modeRec:"Recommended", modePrem:"Release", modeChr:"Timeline",
   hintRec:"MCU release order + the extra packs slotted where they pay off best.",
@@ -805,15 +836,16 @@ const UI = {
   hintChr:"By in-universe chronology — careful, this order spoils a few surprises.",
   fstar:"Show only the Doomsday essentials (★)", fhide:"Hide watched",
   empty:"Nothing here — enable a pack or clear the filters.",
-  footer:"Runtimes are approximate. Future release dates may change — accurate as of July 2026.",
+  footer:"Runtimes are approximate; future release dates may change (as of July 2026). MarvelBinge Tracker is a non-commercial fan project. It is not affiliated with, endorsed by, or authorized by Marvel Studios, The Walt Disney Company, or any related entity. All names, titles, and trademarks belong to their respective owners and are used for informational purposes only. The author earns no revenue from this project.",
   reset:"Reset progress", confirmReset:"Clear all saved progress (checkmarks)?",
   ariaWatched:"Watched: ", chipItems:"items",
   presets:"Quick sets", psMcu:"MCU only", psConn:"Everything connected", psAll:"Absolutely everything",
   notesTitle:"Per-title notes", nOff:"Hidden", nClick:"Tap to reveal", nAll:"Visible", showNote:"ⓘ show note",
   nHintOff:"A clean list — no descriptions.", nHintClick:"Reveal one by one — spoiler-safe.", nHintAll:"All visible — notes may spoil surprises.",
+  discTitle:"Before you start", discOk:"Got it", discText:"MarvelBinge Tracker is a non-commercial fan project — a tool to help you figure out what to watch and in what order. It is not affiliated with or authorized by Marvel Studios or The Walt Disney Company, and the author earns no revenue from it. All names and trademarks belong to their respective owners.",
   progress:function(a,b,p,x,y){return "Watched: "+a+" of "+b+" titles ("+p+"%) · "+x+" h of ~"+y+" h in selected packs";},
   sumMain:function(r,p){return "<b>"+r+" h</b> left · pace: <b>"+p+" h/wk</b>";},
-  sumSub:function(d,n){return d+" days to Doomsday · "+n+" titles planned";}
+  sumSub:function(d,n,g){return d+" days to: "+g+" · "+n+" titles planned";}
  }
 };
 
@@ -821,7 +853,7 @@ const UI = {
 const KEY="droga-do-doomsday-v1";
 const state={ mode:"rec", lang:"pl",
   packs:Object.fromEntries(Object.entries(PACKS).map(function(e){return [e[0],e[1].on];})),
-  fstar:false, fhide:false, notes:"click", watched:new Set() };
+  fstar:false, fhide:false, notes:"click", target:"doom", customDate:"", watched:new Set() };
 const revealed=new Set();
 const store={
   async get(k){
@@ -838,7 +870,7 @@ let saveTimer=null;
 function scheduleSave(){
   clearTimeout(saveTimer);
   saveTimer=setTimeout(function(){
-    const payload=JSON.stringify({mode:state.mode,lang:state.lang,packs:state.packs,fstar:state.fstar,fhide:state.fhide,notes:state.notes,w:Array.from(state.watched)});
+    const payload=JSON.stringify({mode:state.mode,lang:state.lang,packs:state.packs,fstar:state.fstar,fhide:state.fhide,notes:state.notes,target:state.target,customDate:state.customDate,w:Array.from(state.watched)});
     store.set(KEY,payload);
   },350);
 }
@@ -852,6 +884,8 @@ async function loadSaved(){
       if(s.packs) for(const k in state.packs) if(k in s.packs) state.packs[k]=!!s.packs[k];
       state.fstar=!!s.fstar; state.fhide=!!s.fhide;
       if(s.notes==="off"||s.notes==="click"||s.notes==="all") state.notes=s.notes;
+      if(typeof s.target==="string") state.target=s.target;
+      if(typeof s.customDate==="string") state.customDate=s.customDate;
       state.watched=new Set(Array.isArray(s.w)?s.w:[]);
     }
   }catch(e){}
@@ -863,8 +897,25 @@ function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g
 function LOC(){return state.lang==="pl"?"pl-PL":"en-US";}
 function fh(h){ if(h<1) return Math.round(h*60)+" min"; return "~"+(Math.round(h*10)/10).toLocaleString(LOC())+" h"; }
 function fh0(h){ return Math.round(h).toLocaleString(LOC()); }
-const TARGET=new Date(2026,11,18);
-function daysLeft(){ return Math.max(0,Math.ceil((TARGET-new Date())/86400000)); }
+const TARGETS = [
+  {id:"bnd",   date:"2026-07-31", pl:"Spider-Man: Brand New Day", en:"Spider-Man: Brand New Day"},
+  {id:"vq",    date:"2026-10-14", pl:"VisionQuest (Disney+)",     en:"VisionQuest (Disney+)"},
+  {id:"doom",  date:"2026-12-18", pl:"Avengers: Doomsday",        en:"Avengers: Doomsday"},
+  {id:"sw",    date:"2027-12-17", pl:"Avengers: Secret Wars",     en:"Avengers: Secret Wars"},
+  {id:"custom",date:"",           pl:"Własna data…",              en:"Custom date…"}
+];
+function parseDate(s){ const p=s.split("-"); return new Date(+p[0],+p[1]-1,+p[2]); }
+function currentTarget(){
+  if(state.target==="custom" && state.customDate){ return parseDate(state.customDate); }
+  const t=TARGETS.find(function(x){return x.id===state.target;}) || TARGETS.find(function(x){return x.id==="doom";});
+  return parseDate(t.date);
+}
+function targetLabel(){
+  const t=TARGETS.find(function(x){return x.id===state.target;});
+  if(state.target==="custom") return state.customDate ? state.customDate : (UI[state.lang].customLabel);
+  return t ? t[state.lang] : "Avengers: Doomsday";
+}
+function daysLeft(){ return Math.max(0,Math.ceil((currentTarget()-new Date())/86400000)); }
 const tSec=function(s){return state.lang==="en"?(SEC_EN[s]||s):s;};
 const tNote=function(i){return state.lang==="en"?(N_EN[i.id]||i.n):i.n;};
 const tUp=function(i){return state.lang==="en"?(UP_EN[i.id]||i.up):i.up;};
@@ -880,6 +931,20 @@ function applyLang(){
   $("#lbl-days").textContent=t.lblDays;
   $("#lbl-weeks").textContent=t.lblWeeks;
   $("#lbl-pace").textContent=t.lblPace;
+  $("#t-target").textContent=t.targetTo;
+  (function(){
+    const sel=$("#target-sel");
+    sel.innerHTML="";
+    for(const tg of TARGETS){
+      const o=document.createElement("option");
+      o.value=tg.id; o.textContent=tg[state.lang];
+      if(tg.id===state.target) o.selected=true;
+      sel.appendChild(o);
+    }
+    const di=$("#target-date");
+    di.hidden = state.target!=="custom";
+    if(state.customDate) di.value=state.customDate;
+  })();
   $("#t-order").textContent=t.order;
   $("#t-packs").textContent=t.packs;
   $("#t-filters").textContent=t.filters;
@@ -900,6 +965,10 @@ function applyLang(){
   $("#n-click").textContent=t.nClick;
   $("#n-all").textContent=t.nAll;
   $("#langbtn").textContent=(state.lang==="pl")?"EN":"PL";
+  $("#disc-title").textContent=t.discTitle;
+  $("#disc-text").textContent=t.discText;
+  $("#disc-ok").textContent=t.discOk;
+  $("#disc-lang").textContent=(state.lang==="pl")?"EN":"PL";
 }
 
 /* ====== RENDER ====== */
@@ -981,7 +1050,7 @@ function updateSummary(){
   $("#pbar").style.width=pct+"%";
   $("#plabel").textContent=t.progress(wItems.length,scope.length,pct,fh0(wH),fh0(totH));
   $("#sum-main").innerHTML=t.sumMain(fh0(remH),pace);
-  $("#sum-sub").textContent=t.sumSub(dni,scope.length);
+  $("#sum-sub").textContent=t.sumSub(dni,scope.length,targetLabel());
 }
 
 /* ====== ZDARZENIA ====== */
@@ -1014,6 +1083,18 @@ function applyPreset(list){ for(const k in state.packs) state.packs[k]=list.inde
 $("#ps-mcu").addEventListener("click",function(){applyPreset(["mcu","oneshots"]);});
 $("#ps-conn").addEventListener("click",function(){applyPreset(["mcu","netflix","fox","sony","ssu","dwcameo","abc","oneshots"]);});
 $("#ps-all").addEventListener("click",function(){applyPreset(Object.keys(PACKS));});
+$("#target-sel").addEventListener("change",function(e){
+  state.target=e.target.value;
+  if(state.target==="custom" && !state.customDate){
+    const d=new Date(); d.setMonth(d.getMonth()+1);
+    state.customDate=d.toISOString().slice(0,10);
+  }
+  scheduleSave(); applyLang(); render();
+});
+$("#target-date").addEventListener("change",function(e){
+  state.customDate=e.target.value;
+  scheduleSave(); render();
+});
 $("#n-off").addEventListener("click",function(){state.notes="off";scheduleSave();render();});
 $("#n-click").addEventListener("click",function(){state.notes="click";scheduleSave();render();});
 $("#n-all").addEventListener("click",function(){state.notes="all";scheduleSave();render();});
@@ -1032,6 +1113,28 @@ $("#list").addEventListener("click",function(e){
 $("#reset").addEventListener("click",function(){
   if(confirm(UI[state.lang].confirmReset)){ state.watched.clear(); scheduleSave(); render(); }
 });
+
+/* ====== DISCLAIMER (raz na przeglądarkę) ====== */
+const DKEY="marvelbinge-disclaimer-seen";
+(function(){
+  let seen=false;
+  try{ seen = localStorage.getItem(DKEY)==="1"; }catch(e){}
+  if(!seen){
+    const m=$("#disc-modal");
+    applyLang();                 // upewnij się, że treść okna jest w aktualnym języku
+    m.hidden=false;
+    m.style.display="flex";
+    $("#disc-lang").addEventListener("click",function(){
+      state.lang=(state.lang==="pl")?"en":"pl";
+      scheduleSave(); applyLang(); render();   // przełącza też całą stronę pod spodem
+    });
+    $("#disc-ok").addEventListener("click",function(){
+      m.hidden=true;
+      m.style.display="none";
+      try{ localStorage.setItem(DKEY,"1"); }catch(e){}
+    });
+  }
+})();
 
 /* ====== START ====== */
 applyLang(); render();
