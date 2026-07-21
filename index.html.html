@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MarvelBinge Tracker — filmy i seriale Marvela</title>
+<meta name="description" content="Interaktywna checklista wszystkich filmów i seriali Marvela przed Avengers: Doomsday (18.12.2026). Interactive Marvel watchlist tracker for Avengers: Doomsday. PL/EN.">
+<meta property="og:title" content="Droga do Doomsday — Marvel watchlist tracker">
+<meta property="og:description" content="144 filmy, seriale i shorty Marvela w trzech kolejnościach, z licznikiem godzin do premiery. 144 Marvel titles, three viewing orders, live hour counter. PL/EN.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --tusz:#0B1220;        /* tło: głęboki granat kinowej sali */
+    --panel:#151F36;       /* karty */
+    --panel2:#1B2742;
+    --krew:#E23636;        /* czerwień Marvela */
+    --zloto:#F2A93B;       /* odznaki priorytetu, odliczanie */
+    --stal:#8FA3C7;        /* tekst drugorzędny */
+    --biel:#F5F7FB;
+    --linia:#26334F;
+    --ok:#3FBF7F;
+    /* kolory pakietów */
+    --c-mcu:#E23636;
+    --c-netflix:#8A5CF6;
+    --c-fox:#FFD23F;
+    --c-sony:#3D8BE8;
+    --c-ssu:#3AC97C;
+    --c-ff:#4CC3E6;
+    --c-abc:#9AA5B5;
+    --c-antyki:#6B7280;
+    --c-foxtv:#2FB8A6;
+    --c-oneshots:#E873B5;
+    --c-prehist:#A78B5F;
+    --c-kresk:#F0824A;
+    --c-docs:#9BC53D;
+    font-size:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{transition:none !important;animation:none !important}
+  }
+  body{
+    background:var(--tusz);
+    color:var(--biel);
+    font-family:'Barlow',system-ui,-apple-system,'Segoe UI',sans-serif;
+    line-height:1.45;
+    padding-bottom:96px;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 14px}
+
+  /* ---------- HERO ---------- */
+  header.hero{
+    position:relative;
+    overflow:hidden;
+    border-bottom:3px solid var(--krew);
+    background:
+      radial-gradient(circle at 1px 1px, rgba(226,54,54,.16) 1.3px, transparent 1.4px) 0 0/14px 14px,
+      linear-gradient(160deg,#101A30 0%, #0B1220 65%);
+    padding:26px 0 20px;
+  }
+  .eyebrow{
+    font-family:'Barlow Condensed',sans-serif;
+    font-weight:700;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--zloto);font-size:.8rem;
+  }
+  h1{
+    font-family:'Archivo Black','Barlow Condensed',sans-serif;
+    font-size:clamp(1.9rem, 7.5vw, 3rem);
+    line-height:1.02;
+    text-transform:uppercase;
+    margin:6px 0 4px;
+    letter-spacing:.01em;
+  }
+  h1 .red{color:var(--krew)}
+  .hero-sub{color:var(--stal);font-size:.95rem;max-width:56ch}
+  .countrow{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+  .countcard{
+    background:var(--panel);
+    border:1px solid var(--linia);
+    border-radius:10px;
+    padding:10px 14px;
+    min-width:104px;flex:1;
+  }
+  .countcard b{
+    display:block;
+    font-family:'Archivo Black',sans-serif;
+    font-size:1.5rem;color:var(--zloto);line-height:1.1;
+  }
+  .countcard span{font-size:.74rem;color:var(--stal);text-transform:uppercase;letter-spacing:.08em}
+  .progress-outer{margin-top:14px;background:var(--panel);border:1px solid var(--linia);border-radius:999px;height:14px;overflow:hidden}
+  .progress-inner{height:100%;width:0%;background:linear-gradient(90deg,var(--krew),var(--zloto));border-radius:999px;transition:width .5s ease}
+  .progress-label{font-size:.8rem;color:var(--stal);margin-top:6px}
+
+  /* ---------- STEROWANIE ---------- */
+  section.controls{padding:18px 0 8px}
+  .ctl-title{
+    font-family:'Barlow Condensed',sans-serif;font-weight:700;
+    text-transform:uppercase;letter-spacing:.14em;font-size:.78rem;color:var(--stal);
+    margin:14px 0 8px;
+  }
+  .seg{display:flex;background:var(--panel);border:1px solid var(--linia);border-radius:10px;overflow:hidden}
+  .seg button{
+    flex:1;background:none;border:0;color:var(--stal);
+    font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.95rem;
+    letter-spacing:.06em;text-transform:uppercase;
+    padding:11px 4px;cursor:pointer;
+  }
+  .seg button.active{background:var(--krew);color:#fff}
+  .seg button:focus-visible,.chip:focus-visible,.tglrow input:focus-visible,.item input:focus-visible,button:focus-visible{
+    outline:2px solid var(--zloto);outline-offset:2px;
+  }
+  .seg-hint{font-size:.8rem;color:var(--stal);margin-top:7px;min-height:1.2em}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{
+    display:inline-flex;align-items:center;gap:7px;
+    background:var(--panel);border:1px solid var(--linia);
+    border-radius:999px;padding:7px 13px;color:var(--stal);
+    font-size:.84rem;font-weight:600;cursor:pointer;user-select:none;
+  }
+  .chip .dot{width:9px;height:9px;border-radius:50%;background:var(--stal);flex:none}
+  .chip.on{color:var(--biel);border-color:transparent;background:var(--panel2)}
+  .chip.on .dot{box-shadow:0 0 0 3px rgba(255,255,255,.08)}
+  .chip small{color:var(--stal);font-weight:500}
+  .tglrow{display:flex;align-items:center;gap:9px;margin:7px 0;color:var(--stal);font-size:.9rem}
+  .tglrow input{width:17px;height:17px;accent-color:var(--krew)}
+  .tglrow label{cursor:pointer}
+
+  /* ---------- LISTA ---------- */
+  main{padding-top:4px}
+  .sec-h{
+    font-family:'Barlow Condensed',sans-serif;font-weight:700;
+    text-transform:uppercase;letter-spacing:.12em;
+    color:var(--zloto);font-size:.86rem;
+    margin:22px 0 8px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .sec-h::after{content:"";flex:1;height:1px;background:var(--linia)}
+  .item{
+    display:flex;gap:11px;align-items:flex-start;
+    background:var(--panel);
+    border:1px solid var(--linia);
+    border-left:4px solid var(--stal);
+    border-radius:10px;
+    padding:11px 12px;
+    margin-bottom:8px;
+  }
+  .item.watched{opacity:.5}
+  .item.watched .t-title{text-decoration:line-through;text-decoration-color:var(--krew)}
+  .item input[type=checkbox]{
+    width:21px;height:21px;margin-top:2px;flex:none;
+    accent-color:var(--krew);cursor:pointer;
+  }
+  .t-body{flex:1;min-width:0}
+  .t-title{font-weight:700;font-size:.99rem;line-height:1.25}
+  .t-title .star{color:var(--zloto);font-size:.9em}
+  .t-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:5px;align-items:center}
+  .badge{
+    font-family:'Barlow Condensed',sans-serif;font-weight:600;
+    font-size:.72rem;letter-spacing:.07em;text-transform:uppercase;
+    border:1px solid var(--linia);border-radius:5px;
+    padding:1.5px 7px;color:var(--stal);
+  }
+  .badge.up{border-color:var(--zloto);color:var(--zloto)}
+  .t-note{font-size:.82rem;color:var(--stal);margin-top:5px}
+  .empty{
+    text-align:center;color:var(--stal);padding:40px 10px;font-size:.95rem;
+    border:1px dashed var(--linia);border-radius:12px;margin-top:16px;
+  }
+
+  /* ---------- PASEK PODSUMOWANIA ---------- */
+  .sumbar{
+    position:fixed;left:0;right:0;bottom:0;z-index:50;
+    background:rgba(11,18,32,.95);
+    backdrop-filter:blur(8px);
+    border-top:2px solid var(--krew);
+    padding:9px 14px calc(9px + env(safe-area-inset-bottom));
+  }
+  .sumbar .wrap{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .sum-main{font-size:.86rem}
+  .sum-main b{color:var(--zloto)}
+  .sum-sub{font-size:.74rem;color:var(--stal)}
+  .resetbtn{
+    background:none;border:1px solid var(--linia);border-radius:8px;
+    color:var(--stal);font-size:.74rem;padding:6px 10px;cursor:pointer;flex:none;
+  }
+  footer.note{color:var(--stal);font-size:.76rem;padding:26px 0 10px;text-align:center}
+  .hero .wrap{position:relative}
+  .langbtn{position:absolute;top:0;right:14px;background:var(--panel);border:1px solid var(--linia);color:var(--stal);border-radius:8px;padding:6px 12px;font-weight:700;font-family:'Barlow Condensed',sans-serif;letter-spacing:.08em;cursor:pointer;font-size:.85rem}
+  #t-eyebrow{padding-right:64px}
+  .chip.preset{border-color:var(--zloto);color:var(--biel)}
+  .notebtn{background:none;border:1px dashed var(--linia);color:var(--stal);border-radius:6px;padding:3px 10px;font-size:.76rem;cursor:pointer;margin-top:6px;font-family:inherit}
+  .notebtn:hover{color:var(--biel);border-color:var(--stal)}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <button id="langbtn" class="langbtn" aria-label="Przełącz język / switch language">EN</button>
+    <div class="eyebrow" id="t-eyebrow">Cel: Avengers: Doomsday · kina · 18 grudnia 2026</div>
+    <h1 id="t-h1">Marvel<span class="red">Binge</span> Tracker</h1>
+    <p class="hero-sub" id="t-sub">Odhaczaj, co już za Tobą. Wybierz kolejność i pakiety spoza MCU — licznik godzin i tempo tygodniowe przeliczą się same. Postęp zapisuje się automatycznie.</p>
+    <div class="countrow">
+      <div class="countcard"><b id="cd-days">—</b><span id="lbl-days">dni do premiery</span></div>
+      <div class="countcard"><b id="cd-weeks">—</b><span id="lbl-weeks">pełnych tygodni</span></div>
+      <div class="countcard"><b id="cd-pace">—</b><span id="lbl-pace">godz./tydzień, by zdążyć</span></div>
+    </div>
+    <div class="progress-outer"><div class="progress-inner" id="pbar"></div></div>
+    <div class="progress-label" id="plabel">Wczytywanie…</div>
+  </div>
+</header>
+
+<section class="controls">
+  <div class="wrap">
+    <div class="ctl-title" id="t-order">Kolejność oglądania</div>
+    <div class="seg" role="tablist">
+      <button id="mode-rec" class="active">Polecana</button>
+      <button id="mode-prem">Premiery</button>
+      <button id="mode-chr">Chronologia</button>
+    </div>
+    <div class="seg-hint" id="seg-hint"></div>
+
+    <div class="ctl-title" id="t-presets">Szybkie zestawy</div>
+    <div class="chips">
+      <button class="chip preset" id="ps-mcu">Samo MCU</button>
+      <button class="chip preset" id="ps-conn">Wszystko powiązane</button>
+      <button class="chip preset" id="ps-all">Absolutnie wszystko</button>
+    </div>
+
+    <div class="ctl-title" id="t-packs">Pakiety (włącz / wyłącz)</div>
+    <div class="chips" id="packchips"></div>
+
+    <div class="ctl-title" id="t-filters">Filtry</div>
+    <div class="tglrow"><input type="checkbox" id="f-star"><label for="f-star" id="t-fstar">Pokaż tylko kluczowe przed Doomsday (★)</label></div>
+    <div class="tglrow"><input type="checkbox" id="f-hide"><label for="f-hide" id="t-fhide">Ukryj już obejrzane</label></div>
+
+    <div class="ctl-title" id="t-notes">Notki przy pozycjach</div>
+    <div class="seg">
+      <button id="n-off">Schowane</button>
+      <button id="n-click" class="active">Na klik</button>
+      <button id="n-all">Widoczne</button>
+    </div>
+    <div class="seg-hint" id="notes-hint"></div>
+  </div>
+</section>
+
+<main>
+  <div class="wrap" id="list"></div>
+  <div class="wrap"><div class="empty" id="empty" style="display:none">Nic tu nie ma — włącz jakiś pakiet albo wyłącz filtry.</div></div>
+</main>
+
+<footer class="note">
+  <div class="wrap" id="t-footer">Czasy trwania są przybliżone. Daty przyszłych premier mogą się zmienić — stan na lipiec 2026.</div>
+</footer>
+
+<div class="sumbar">
+  <div class="wrap">
+    <div>
+      <div class="sum-main" id="sum-main">—</div>
+      <div class="sum-sub" id="sum-sub"></div>
+    </div>
+    <button class="resetbtn" id="reset">Wyczyść postęp</button>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ====== PAKIETY (PL/EN) ====== */
+const PACKS = {
+  mcu:     {pl:"MCU — podstawa",             en:"MCU — the core",           color:"var(--c-mcu)",     on:true },
+  netflix: {pl:"Netflix: Defenders",         en:"Netflix: Defenders",       color:"var(--c-netflix)", on:true },
+  fox:     {pl:"X-Men + Deadpool (Fox)",     en:"X-Men + Deadpool (Fox)",   color:"var(--c-fox)",     on:true },
+  sony:    {pl:"Spider-Man (Sony)",          en:"Spider-Man (Sony)",        color:"var(--c-sony)",    on:true },
+  ssu:     {pl:"Venom i spółka (SSU)",       en:"Venom & co. (SSU)",        color:"var(--c-ssu)",     on:true },
+  dwcameo: {pl:"Pomosty cameo (D&W)",        en:"Cameo bridges (D&W)",      color:"var(--c-ff)",      on:true },
+  abc:     {pl:"ABC / Hulu",                 en:"ABC / Hulu",               color:"var(--c-abc)",     on:true },
+  oneshots:{pl:"One-Shoty i mikro-serie",    en:"One-Shots & web shorts",   color:"var(--c-oneshots)",on:true },
+  wyspy:   {pl:"Samotne wyspy",              en:"Standalone islands",       color:"var(--c-foxtv)",   on:false},
+  antyki:  {pl:"Antyki (2001–2012)",         en:"Oldies (2001–2012)",       color:"var(--c-antyki)",  on:false},
+  prehist: {pl:"Prehistoria (1944–98)",      en:"Prehistory (1944–98)",     color:"var(--c-prehist)", on:false},
+  kresk:   {pl:"Kreskówki (1966–2020)",      en:"Cartoons (1966–2020)",     color:"var(--c-kresk)",   on:false},
+  docs:    {pl:"Dokumenty",                  en:"Documentaries",            color:"var(--c-docs)",    on:false}
+};
+const TYP = {film:{pl:"Film",en:"Film"}, serial:{pl:"Serial",en:"Series"}, special:{pl:"Specjal",en:"Special"}, anim:{pl:"Animacja",en:"Animation"}, short:{pl:"Krótki metraż",en:"Short"}, dok:{pl:"Dokument",en:"Documentary"}};
+
+/* ====== DANE ======
+   d = data premiery (RRRRMMDD), chr = pozycja na osi czasu, rec = kolejność polecana, ostatnie pole = sekcja */
+const RAW = [
+["cap44","Captain America (serial kinowy, 15 rozdziałów)","1944","film","prehist",4,19440205,0.001,0,"pierwsza ekranizacja Marvela (wtedy Timely) w historii — Republic Pictures","","Prehistoria (1944–98) — pełny hardkor"],
+["spidey74","Spidey Super Stories (The Electric Company)","1974–77","short","prehist",2.5,19741021,0.002,0,"aktorskie skecze ze Spider-Manem w programie edukacyjnym CBS","","Prehistoria (1944–98) — pełny hardkor"],
+["asm77","The Amazing Spider-Man (serial CBS)","1977–79","serial","prehist",10,19770914,0.003,0,"Nicholas Hammond; dwa wątki sklejono w kinowe Strikes Back i Dragon's Challenge","","Prehistoria (1944–98) — pełny hardkor"],
+["hulk77","The Incredible Hulk (serial, 5 sezonów)","1977–82","serial","prehist",64,19771104,0.005,0,"Bill Bixby i Lou Ferrigno — klasyk telewizji","","Prehistoria (1944–98) — pełny hardkor"],
+["toei","Spider-Man (Toei, Japonia)","1978–79","serial","prehist",16.5,19780517,0.0055,0,"kultowy japoński Spider-Man z gigantycznym robotem Leopardonem; oficjalna licencja","","Prehistoria (1944–98) — pełny hardkor"],
+["ds78","Dr. Strange (film TV)","1978","film","prehist",1.6,19780906,0.006,0,"telewizyjna próba wprowadzenia Strange'a","","Prehistoria (1944–98) — pełny hardkor"],
+["cap79","Captain America I–II (2 filmy TV)","1979","film","prehist",3.2,19790119,0.0065,0,"Reb Brown jako Cap na motocyklu","","Prehistoria (1944–98) — pełny hardkor"],
+["howard","Howard the Duck","1986","film","prehist",1.8,19860801,0.01,0,"pierwszy kinowy Marvel; legendarna klapa, dziś kult; Howard mignął potem w GotG","","Prehistoria (1944–98) — pełny hardkor"],
+["hulktv","The Incredible Hulk — 3 filmy TV","1988–90","film","prehist",4.4,19880522,0.012,0,"Powrót / Proces / Śmierć; w pierwszym gościnnie telewizyjny Thor, w drugim — Daredevil","","Prehistoria (1944–98) — pełny hardkor"],
+["pun89","The Punisher","1989","film","prehist",1.5,19891005,0.02,0,"Dolph Lundgren jako Frank Castle","","Prehistoria (1944–98) — pełny hardkor"],
+["cap90","Captain America","1990","film","prehist",1.6,19901214,0.03,0,"kinowa klapa z gumowymi uszami","","Prehistoria (1944–98) — pełny hardkor"],
+["powerpack","Power Pack (pilot)","1991","short","prehist",0.5,19910101,0.013,0,"niewyemitowany pilot; krąży w sieci","","Prehistoria (1944–98) — pełny hardkor"],
+["ff94","The Fantastic Four","1994","film","prehist",1.5,19940101,0.04,0,"nigdy oficjalnie niewydany — krąży jako bootleg; szczyt kompletyzmu","","Prehistoria (1944–98) — pełny hardkor"],
+["genx","Generation X","1996","film","prehist",1.6,19960220,0.05,0,"telewizyjny pilot o młodych mutantach","","Prehistoria (1944–98) — pełny hardkor"],
+["nightman","Night Man (2 sezony)","1997–99","serial","prehist",33,19970915,0.055,0,"bohater Malibu Comics — wytwórni należącej do Marvela","","Prehistoria (1944–98) — pełny hardkor"],
+["nickfury","Nick Fury: Agent of S.H.I.E.L.D.","1998","film","prehist",2,19980526,0.06,0,"David Hasselhoff jako Nick Fury","","Prehistoria (1944–98) — pełny hardkor"],
+["mutantx","Mutant X (3 sezony)","2001–04","serial","antyki",47,20011006,0.15,0,"produkcja Marvel Studios sprzed MCU; luźno mutanckie klimaty","","Antyki (2001–2012) — wyspy bez powiązań"],
+["hulk03","Hulk","2003","film","antyki",2.3,20030620,0.4,0,"reż. Ang Lee — to jeszcze nie MCU","","Antyki (2001–2012) — wyspy bez powiązań"],
+["pun04","The Punisher","2004","film","antyki",2.1,20040416,0.5,0,"Thomas Jane jako Frank Castle","","Antyki (2001–2012) — wyspy bez powiązań"],
+["manthing","Man-Thing","2005","film","antyki",1.6,20050430,0.75,0,"horror klasy B; rarytas dla kompletystów","","Antyki (2001–2012) — wyspy bez powiązań"],
+["gr1","Ghost Rider","2007","film","antyki",1.9,20070216,0.8,0,"Nicolas Cage jako Johnny Blaze — inny Ghost Rider niż Robbie Reyes z Agents of S.H.I.E.L.D.","","Antyki (2001–2012) — wyspy bez powiązań"],
+["wz","Punisher: War Zone","2008","film","antyki",1.7,20081205,0.9,0,"Lionsgate; wyszedł PO Iron Manie, ale to nie MCU — prawa do Punishera leżały wtedy poza Marvel Studios","","Antyki (2001–2012) — wyspy bez powiązań"],
+["gr2","Ghost Rider: Spirit of Vengeance","2012","film","antyki",1.6,20120217,0.95,0,"dalsze losy Blaze'a; nadal osobne continuity, bez związku z serialem","","Antyki (2001–2012) — wyspy bez powiązań"],
+["msh66","The Marvel Super Heroes","1966","anim","kresk",23,19660901,1.01,0,"pierwsza animacja Marvela w historii; Kapitan, Hulk, Iron Man, Thor i Namor","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["sm67","Spider-Man","1967–70","anim","kresk",19,19670909,1.02,0,"źródło mema z wytykającymi się Spider-Manami","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["ff67","Fantastic Four","1967–68","anim","kresk",7.3,19670909,1.03,0,"klasyczna Czwórka Hanny-Barbery","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["nff78","The New Fantastic Four","1978","anim","kresk",4.8,19780909,1.04,0,"Human Torch zastąpiony robotem H.E.R.B.I.E.","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["thing79","The Thing (Fred and Barney Meet the Thing)","1979","anim","kresk",4.7,19790908,1.05,0,"Hanna-Barbera: nastoletni Ben Grimm w bloku z Flintstonami","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["sw79","Spider-Woman","1979–80","anim","kresk",5.9,19790922,1.06,0,"pierwsza bohaterka Marvela z własnym serialem","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["sm81","Spider-Man","1981–82","anim","kresk",9.5,19810912,1.07,0,"solowy poprzednik Amazing Friends","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["smaf","Spider-Man and His Amazing Friends","1981–83","anim","kresk",8.8,19810912,1.08,0,"Spidey, Iceman i stworzona specjalnie dla serialu Firestar","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["hulk82","The Incredible Hulk","1982–83","anim","kresk",4.8,19820918,1.09,0,"animowany Hulk lat 80.","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["pryde","Pryde of the X-Men","1989","anim","kresk",0.4,19890916,1.1,0,"niedoszły pilot serialu o X-Menach","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["im94","Iron Man","1994–96","anim","kresk",9.5,19940924,1.11,0,"połowa bloku Marvel Action Hour","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["ffanim","Fantastic Four","1994–96","anim","kresk",9.5,19940924,1.12,0,"druga połowa Marvel Action Hour","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["smtas","Spider-Man: The Animated Series (5 sezonów)","1994–98","anim","kresk",24,19941119,1.13,0,"ukochany Spider-Man lat 90.; finał to Spider-Verse, zanim był modny","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["ultraforce","Ultraforce","1995","anim","kresk",5,19950910,1.35,0,"bohaterowie Malibu Comics","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["hulk96","The Incredible Hulk","1996–97","anim","kresk",7.7,19960908,1.14,0,"gościnnie She-Hulk","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["ss98","Silver Surfer","1998","anim","kresk",4.8,19980206,1.15,0,"urwany cliffhangerem po jednym sezonie","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["smu99","Spider-Man Unlimited","1999–2001","anim","kresk",4.6,19991002,1.16,0,"Spider-Man na Przeciw-Ziemi","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["avuts","The Avengers: United They Stand","1999–2000","anim","kresk",4.6,19991030,1.17,0,"Avengers bez wielkiej trójki","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["xevo","X-Men: Evolution (4 sezony)","2000–03","anim","kresk",18,20001104,1.18,0,"X-Meni jako licealiści; tu debiutuje X-23","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["smmtv","Spider-Man: The New Animated Series","2003","anim","kresk",4.6,20030711,1.19,0,"CGI od MTV; Peter mówi głosem Neila Patricka Harrisa","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["dtvfilms","Marvel Animated Features (8 filmów DVD)","2006–11","film","kresk",9.5,20060221,1.2,0,"m.in. Planet Hulk i Hulk Vs","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["ffwgh","Fantastic Four: World's Greatest Heroes","2006–07","anim","kresk",9.1,20060902,1.21,0,"stylowa Czwórka lat 2000.","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["specsm","The Spectacular Spider-Man","2008–09","anim","kresk",9.1,20080308,1.22,0,"dla wielu najlepszy animowany Spider-Man; skasowany przedwcześnie","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["watx","Wolverine and the X-Men","2009","anim","kresk",9.1,20090123,1.23,0,"alternatywni X-Meni; urwane po jednym sezonie","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["imaa","Iron Man: Armored Adventures (2 sezony)","2009–12","anim","kresk",18,20090424,1.24,0,"nastoletni Tony Stark","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["knights","Marvel Knights Animation (motion comics, 10 wydań)","2009–15","anim","kresk",10,20090819,1.45,0,"nieruchome komiksy z lektorem — m.in. Astonishing X-Men Whedona","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["shs","The Super Hero Squad Show (2 sezony)","2009–11","anim","kresk",18,20090914,1.25,0,"komedia dla młodszych widzów","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["bp2010","Black Panther (motion comic, BET)","2010","anim","kresk",2.2,20100116,1.46,0,"Djimon Hounsou jako T'Challa","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["marvelanime","Marvel Anime (4 serie + 2 filmy)","2010–14","anim","kresk",21,20101001,1.26,0,"Iron Man, Wolverine, X-Men i Blade od studia Madhouse","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["aemh","The Avengers: Earth's Mightiest Heroes (2 sezony)","2010–12","anim","kresk",18,20101020,1.27,0,"przez wielu uznawany za najlepszy animowany serial Marvela","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["usm","Ultimate Spider-Man (4 sezony)","2012–17","anim","kresk",36,20120401,1.28,0,"humor i łamanie czwartej ściany","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["avass","Avengers Assemble (5 sezonów)","2013–19","anim","kresk",44,20130526,1.29,0,"następca EMH, bliżej stylistyki filmów","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["hsmash","Hulk and the Agents of S.M.A.S.H. (2 sezony)","2013–15","anim","kresk",18,20130811,1.3,0,"cała rodzina Hulków w jednym serialu","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["tvcrossovers","Animowane specjale TV (Mission Marvel, Frost Fight!, Where Monsters Dwell)","2013–16","film","kresk",3.5,20130816,1.38,0,"crossover z Fineaszem i Ferbem + dwa filmy TV","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["lego","LEGO Marvel (9 specjali i miniserii)","2013–24","anim","kresk",4,20131105,1.44,0,"od Maximum Overload po Mission Demolition","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["heroesunited","Heroes United (2 filmy CGI)","2013–14","film","kresk",2.4,20131203,1.37,0,"Iron Man i Hulk / Iron Man i Kapitan Ameryka","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["bh6","Big Hero 6","2014","film","kresk",1.7,20141107,1.31,0,"Disney na bazie komiksu Marvela; Oscar dla animacji","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["gotganim","Guardians of the Galaxy (3 sezony)","2015–19","anim","kresk",28,20150926,1.32,0,"Strażnicy na fali kinowego sukcesu","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["microshorts","Mikro-shorty (Rocket & Groot, Ant-Man, Funko, Battleworld)","2017–20","short","kresk",1,20170310,1.41,0,"promocyjne shorciki Disney XD i Funko","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["sm17","Marvel's Spider-Man (3 sezony)","2017–20","anim","kresk",20,20170819,1.33,0,"Peter w akademii; blisko gier i komiksów","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["shadv","Marvel Super Hero Adventures (shorty + specjale)","2017–20","anim","kresk",4.5,20171021,1.42,0,"Spidey dla najmłodszych","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["bh6s","Big Hero 6: The Series (3 sezony)","2017–21","anim","kresk",22,20171120,1.34,0,"dalsze przygody Hiro i Baymaxa","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["rising","Marvel Rising (film + shorty i specjale)","2018–19","anim","kresk",4.5,20180813,1.36,0,"Secret Warriors i pięć specjali","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["spidey21","Spidey and His Amazing Friends (4 sezony)","2021–26","anim","kresk",35,20210806,1.43,0,"serial przedszkolny — a jednak na liście, bo wszystko znaczy wszystko","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["baymax","Baymax!","2022","anim","kresk",1.1,20220629,1.4,0,"kontynuacja Big Hero 6 od Disneya","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["moongirl","Moon Girl and Devil Dinosaur (2 sezony)","2023–25","anim","kresk",13,20230210,1.39,0,"Lunella i jej T-Rex; świetnie przyjęty","","Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek"],
+["im1","Iron Man","2008","film","mcu",2.1,20080502,5,1,"tu wszystko się zaczyna — RDJ, dziś Doktor Doom","","Saga Nieskończoności · Faza 1"],
+["hulk08","The Incredible Hulk","2008","film","mcu",1.9,20080613,7,0,"jedyny występ Nortona; Ross i Blonsky wrócą po latach","","Saga Nieskończoności · Faza 1"],
+["os_consultant","Marvel One-Shot: The Consultant","2011","short","oneshots",0.07,20110913,7.5,0,"Coulson i Sitwell po wydarzeniach z Incredible Hulk","","Saga Nieskończoności · Faza 1"],
+["im2","Iron Man 2","2010","film","mcu",2.1,20100507,6,0,"debiut Black Widow; Howard Stark i Expo","","Saga Nieskończoności · Faza 1"],
+["thor1","Thor","2011","film","mcu",1.9,20110506,8,0,"debiut Thora, Lokiego i Hawkeye'a","","Saga Nieskończoności · Faza 1"],
+["os_funny","Marvel One-Shot: A Funny Thing Happened on the Way to Thor's Hammer","2011","short","oneshots",0.07,20111025,7.9,0,"Coulson w drodze do młota Thora","","Saga Nieskończoności · Faza 1"],
+["catfa","Captain America: The First Avenger","2011","film","mcu",2.1,20110722,2,0,"początek osi czasu MCU; Steve, Peggy i Tesseract","","Saga Nieskończoności · Faza 1"],
+["os_carter","Marvel One-Shot: Agent Carter","2013","short","oneshots",0.25,20130924,2.4,0,"Peggy po wojnie; zalążek serialu Agent Carter","","Saga Nieskończoności · Faza 1"],
+["acarter","Agent Carter (2 sezony)","2015–16","serial","abc",13,20150106,2.5,0,"po Pierwszym starciu; luźne domknięcie postaci dopiero w Agents of S.H.I.E.L.D. S7","","Saga Nieskończoności · Faza 1"],
+["avg1","Avengers","2012","film","mcu",2.4,20120504,9,1,"pierwsza wielka drużynówka; bitwa o Nowy Jork","","Saga Nieskończoności · Faza 1"],
+["os_item47","Marvel One-Shot: Item 47","2012","short","oneshots",0.2,20120925,9.5,0,"para z chitaurską bronią po bitwie o Nowy Jork","","Saga Nieskończoności · Faza 1"],
+["im3","Iron Man 3","2013","film","mcu",2.2,20130503,10,0,"Tony po Nowym Jorku; twist z Mandarynem wraca w Shang-Chi","","Faza 2"],
+["os_king","Marvel One-Shot: All Hail the King","2014","short","oneshots",0.23,20140225,10.5,0,"epilog Iron Mana 3; wątek Slattery'ego wraca w Shang-Chi","","Faza 2"],
+["aos_s1a","Agents of S.H.I.E.L.D. S1 E1–7","2013","serial","abc",5,20130924,10.6,0,"start po bitwie o Nowy Jork; Coulson żyje","","Faza 2"],
+["tdw","Thor: The Dark World","2013","film","mcu",1.9,20131108,11,0,"kamień rzeczywistości; kluczowe sceny z Lokim","","Faza 2"],
+["aos_s1b","Agents of S.H.I.E.L.D. S1 E8–16","2013–14","serial","abc",6.5,20131126,11.5,0,"polowanie na Deathloka i tajemnica T.A.H.I.T.I.","","Faza 2"],
+["catws","Captain America: The Winter Soldier","2014","film","mcu",2.3,20140404,12,1,"bracia Russo — reżyserzy Doomsday","","Faza 2"],
+["aos_s1c","Agents of S.H.I.E.L.D. S1 E17–22","2014","serial","abc",4.3,20140408,12.3,0,"bezpośredni crossover z Zimowym żołnierzem — upadek T.A.R.C.Z.Y.","","Faza 2"],
+["gotg1","Guardians of the Galaxy","2014","film","mcu",2,20140801,13,0,"kosmiczna gałąź MCU; kamień mocy","","Faza 2 — ciąg dalszy"],
+["aos_s2a","Agents of S.H.I.E.L.D. S2 E1–19","2014–15","serial","abc",13.7,20140923,13.5,0,"Inhumans wchodzą do gry; sekret Skye","","Faza 2 — ciąg dalszy"],
+["aou","Avengers: Age of Ultron","2015","film","mcu",2.4,20150501,18,1,"narodziny Ultrona — wraca w VisionQuest","","Faza 2 — ciąg dalszy"],
+["aos_s2b","Agents of S.H.I.E.L.D. S2 E20–22","2015","serial","abc",2.2,20150505,18.3,0,"domyka wątki Age of Ultron","","Faza 2 — ciąg dalszy"],
+["whih","WHIH Newsfront","2015–16","short","oneshots",0.4,20150702,18.6,0,"fejkowe serwisy informacyjne (YouTube): 5 odc. przed Ant-Manem, 5 przed Civil War","","Faza 2 — ciąg dalszy"],
+["antman1","Ant-Man","2015","film","mcu",2,20150717,19,0,"reguły świata kwantowego — fundament pod Endgame","","Faza 2 — ciąg dalszy"],
+["aos_s3a","Agents of S.H.I.E.L.D. S3 E1–19","2015–16","serial","abc",13.7,20150929,19.3,0,"Secret Warriors i Hive","","Faza 2 — ciąg dalszy"],
+["cacw","Captain America: Civil War","2016","film","mcu",2.5,20160506,24,1,"Avengers kontra Avengers; debiuty Black Panthery i Spider-Mana","","Faza 3"],
+["os_teamthor","Team Thor + Team Darryl (3 shorty)","2016–18","short","oneshots",0.25,20160902,24.5,0,"mockumenty: co porabiał Thor w czasie Civil War","","Faza 3"],
+["aos_s3b","Agents of S.H.I.E.L.D. S3 E20–22","2016","serial","abc",2.2,20160510,24.6,0,"pokłosie Civil War","","Faza 3"],
+["aos_s4","Agents of S.H.I.E.L.D. S4","2016–17","serial","abc",15.8,20160920,24.7,0,"Ghost Rider (Robbie Reyes — nie wersja Cage'a) i LMD; Slingshot oglądaj między odc. 8 a 9","","Faza 3"],
+["slingshot","Agents of S.H.I.E.L.D.: Slingshot","2016","short","abc",0.5,20161213,24.72,0,"6 mikro-odcinków o Yo-Yo (YouTube)","","Faza 3"],
+["inhumans","Inhumans","2017","serial","abc",5.5,20170929,34.5,0,"królewska rodzina Inhumans; mitologia wspólna z Agentami","","Faza 3"],
+["ds1","Doctor Strange","2016","film","mcu",1.9,20161104,30,0,"wejście magii do MCU; kamień czasu","","Faza 3"],
+["gotg2","Guardians of the Galaxy Vol. 2","2017","film","mcu",2.3,20170505,15,0,"Ego i prawdziwa rodzina Petera","","Faza 3"],
+["smh","Spider-Man: Homecoming","2017","film","mcu",2.2,20170707,28,0,"pierwszy solowy Spider-Man w MCU; Vulture","","Faza 3"],
+["aos_s5","Agents of S.H.I.E.L.D. S5","2017–18","serial","abc",15.8,20171201,28.3,0,"kosmos i pętla czasowa — serial odrywa się od filmów","","Faza 3"],
+["runaways","Runaways (3 sezony)","2017–19","serial","abc",24,20171121,35.5,0,"nastolatki kontra rodzice-złoczyńcy; crossover z Cloak & Dagger","","Faza 3"],
+["cdag","Cloak & Dagger (2 sezony)","2018–19","serial","abc",15,20180607,35.6,0,"dwójka spleciona mocami; crossover z Runaways","","Faza 3"],
+["helstrom","Helstrom","2020","serial","wyspy",8,20201016,40.5,0,"mroczny horror z porzuconej marki Adventure into Fear","","Faza 3"],
+["thor3","Thor: Ragnarok","2017","film","mcu",2.2,20171103,35,0,"reset Thora; Hulk na Sakaarze; prowadzi wprost do Infinity War","","Faza 3"],
+["bp1","Black Panther","2018","film","mcu",2.2,20180216,27,0,"Wakanda i Killmonger; fenomen kulturowy","","Faza 3"],
+["aiw","Avengers: Infinity War","2018","film","mcu",2.5,20180427,39,1,"pierwsza połowa wielkiego finału; pstryknięcie Thanosa","","Faza 3"],
+["amw","Ant-Man and the Wasp","2018","film","mcu",2,20180706,38,0,"dzieje się tuż przed Infinity War — scena po napisach jest kluczowa","","Faza 3"],
+["aos_s67","Agents of S.H.I.E.L.D. S6–7","2019–20","serial","abc",18.7,20190510,38.3,0,"finał; domyka się równolegle z erą Infinity War","","Faza 3"],
+["cm","Captain Marvel","2019","film","mcu",2.1,20190308,4,0,"lata 90.; skąd Fury zna kosmos i skąd wziął pager","","Faza 3"],
+["ae","Avengers: Endgame","2019","film","mcu",3,20190426,40,1,"finał Sagi Nieskończoności; podróże w czasie otwierają multiwersum","","Faza 3"],
+["peterstodo","Marvel One-Shot: Peter's To-Do List","2019","short","oneshots",0.06,20191001,46.9,0,"wycięta scenka z Far From Home wydana jako One-Shot","","Faza 3"],
+["smffh","Spider-Man: Far From Home","2019","film","mcu",2.2,20190702,47,0,"świat w żałobie po Endgame; Mysterio; scena po napisach zmienia wszystko","","Faza 3"],
+["dailybugle","The Daily Bugle","2019–21","short","oneshots",0.5,20190717,47.3,0,"fejkowe newsy J. Jonaha (YouTube/TikTok); między Far From Home a No Way Home","","Faza 3"],
+["ddn1","Daredevil S1","2015","serial","netflix",11.5,20150410,16,0,"minimum przed Born Again: Daredevil 1–3 + Punisher","","Netflix: Defenders — most do Born Again"],
+["jj1","Jessica Jones S1","2015","serial","netflix",11,20151120,17,0,"Kilgrave Tennanta — jeden z najlepszych złoczyńców Marvela","","Netflix: Defenders — most do Born Again"],
+["ddn2","Daredevil S2","2016","serial","netflix",11.5,20160318,20,0,"debiut Punishera Bernthala i Elektry","","Netflix: Defenders — most do Born Again"],
+["lc1","Luke Cage S1","2016","serial","netflix",11.5,20160930,21,0,"kuloodporny bohater Harlemu","","Netflix: Defenders — most do Born Again"],
+["if1","Iron Fist S1","2017","serial","netflix",11,20170317,22,0,"najsłabiej oceniany z paczki","","Netflix: Defenders — most do Born Again"],
+["def","The Defenders","2017","serial","netflix",6.5,20170818,23,0,"crossover całej czwórki obrońców","","Netflix: Defenders — most do Born Again"],
+["pun1","The Punisher S1","2017","serial","netflix",11,20171117,29,0,"solowy Frank; wojenna trauma i zemsta","","Netflix: Defenders — most do Born Again"],
+["jj2","Jessica Jones S2","2018","serial","netflix",12,20180308,31,0,"Jessica kontra własna przeszłość","","Netflix: Defenders — most do Born Again"],
+["lc2","Luke Cage S2","2018","serial","netflix",12,20180622,32,0,"Bushmaster i walka o Harlem","","Netflix: Defenders — most do Born Again"],
+["if2","Iron Fist S2","2018","serial","netflix",8.5,20180907,33,0,"krótszy i sprawniejszy sezon Danny'ego","","Netflix: Defenders — most do Born Again"],
+["ddn3","Daredevil S3","2018","serial","netflix",12,20181019,34,0,"Bullseye i powrót Fiska; szczyt ery Netflixa","","Netflix: Defenders — most do Born Again"],
+["pun2","The Punisher S2","2019","serial","netflix",11,20190118,36,0,"ostatnia solowa runda Franka przed przerwą","","Netflix: Defenders — most do Born Again"],
+["jj3","Jessica Jones S3","2019","serial","netflix",11.5,20190614,37,0,"finał całej ery Netflixa","","Netflix: Defenders — most do Born Again"],
+["wv","WandaVision","2021","serial","mcu",5.8,20210115,42,1,"początek trylogii: WandaVision → Agatha → VisionQuest","","Saga Multiwersum · Faza 4"],
+["faws","The Falcon and the Winter Soldier","2021","serial","mcu",5.3,20210319,46,1,"Sam przejmuje tarczę Kapitana Ameryki","","Saga Multiwersum · Faza 4"],
+["loki1","Loki S1","2021","serial","mcu",4.8,20210609,43,1,"fundament multiwersum i TVA","","Saga Multiwersum · Faza 4"],
+["bw","Black Widow","2021","film","mcu",2.2,20210709,26,0,"Yelena i Red Guardian — trzon Thunderbolts","","Saga Multiwersum · Faza 4"],
+["wi1","What If…? S1","2021","anim","mcu",4.5,20210811,52,0,"animowane warianty znanych historii; debiut Watchera","","Saga Multiwersum · Faza 4"],
+["modok","M.O.D.O.K.","2021","anim","wyspy",4,20210521,40.6,0,"animowana komedia Hulu; poza kanonem","","Saga Multiwersum · Faza 4"],
+["hitmonkey","Hit-Monkey (2 sezony)","2021–24","anim","wyspy",8,20211117,40.7,0,"animacja Hulu o małpie-zabójcy","","Saga Multiwersum · Faza 4"],
+["shangchi","Shang-Chi and the Legend of the Ten Rings","2021","film","mcu",2.2,20210903,45,0,"Dziesięć Pierścieni; domyka wątek Mandaryna z Iron Mana 3","","Saga Multiwersum · Faza 4"],
+["eternals","Eternals","2021","film","mcu",2.6,20211105,48,0,"kosmiczna skala i Celestianie; skutki widać w MCU do dziś","","Saga Multiwersum · Faza 4"],
+["hawkeye","Hawkeye","2021","serial","mcu",4.7,20211124,51,0,"debiut Kate Bishop; Kingpin wchodzi do MCU","","Saga Multiwersum · Faza 4"],
+["sm1","Spider-Man","2002","film","sony",2,20020503,48.1,0,"Green Goblin Dafoe — wraca w No Way Home","","Pajęcze uniwersa — tuż przed No Way Home"],
+["sm2","Spider-Man 2","2004","film","sony",2.1,20040630,48.2,0,"Doc Ock Moliny; dla wielu najlepszy film o Spider-Manie","","Pajęcze uniwersa — tuż przed No Way Home"],
+["sm3","Spider-Man 3","2007","film","sony",2.3,20070504,48.3,0,"Sandman i symbiont; tak, ten taniec","","Pajęcze uniwersa — tuż przed No Way Home"],
+["tasm","The Amazing Spider-Man","2012","film","sony",2.3,20120703,48.4,0,"Garfield i Lizard — obaj wracają w NWH","","Pajęcze uniwersa — tuż przed No Way Home"],
+["tasm2","The Amazing Spider-Man 2","2014","film","sony",2.4,20140502,48.5,0,"Electro Foxxa wraca w NWH; los Gwen","","Pajęcze uniwersa — tuż przed No Way Home"],
+["venom","Venom","2018","film","ssu",1.9,20181005,48.6,0,"narodziny duetu Eddie–symbiont","","Pajęcze uniwersa — tuż przed No Way Home"],
+["venom2","Venom: Let There Be Carnage","2021","film","ssu",1.6,20211001,48.7,0,"scena po napisach zahacza o No Way Home","","Pajęcze uniwersa — tuż przed No Way Home"],
+["itsv","Spider-Man: Into the Spider-Verse","2018","anim","sony",2,20181214,48.8,0,"animowane arcydzieło; osobne uniwersum","","Pajęcze uniwersa — tuż przed No Way Home"],
+["atsv","Spider-Man: Across the Spider-Verse","2023","anim","sony",2.3,20230602,48.9,0,"urywa się w pół — finał w drodze","","Pajęcze uniwersa — tuż przed No Way Home"],
+["spiderwithin","The Spider Within: A Spider-Verse Story","2024","short","sony",0.12,20240327,48.91,0,"oficjalny krótki metraż o zdrowiu psychicznym Milesa","","Pajęcze uniwersa — tuż przed No Way Home"],
+["spidernoir","Spider-Noir","2026","serial","wyspy",6,20260527,48.97,0,"aktorski serial Sony na Prime Video; Cage jako Spider-Noir; samodzielna historia z lat 30.","","Pajęcze uniwersa — tuż przed No Way Home"],
+["smnwh","Spider-Man: No Way Home","2021","film","mcu",2.5,20211217,49,1,"wielka wypłata za Maguire'a, Garfielda i Venoma","","Faza 4 — po No Way Home"],
+["mk","Moon Knight","2022","serial","mcu",5,20220330,53,0,"podwójny Oscar Isaac; egipscy bogowie; samodzielna historia","","Faza 4 — po No Way Home"],
+["dsmom","Doctor Strange in the Multiverse of Madness","2022","film","mcu",2.1,20220506,50,1,"multiwersum i Illuminati","","Faza 4 — po No Way Home"],
+["msm","Ms. Marvel","2022","serial","mcu",5,20220608,57,0,"debiut Kamali Khan; finał rzuca mutanckie słowo na M","","Faza 4 — po No Way Home"],
+["thor4","Thor: Love and Thunder","2022","film","mcu",2,20220708,58,0,"Gorr Bale'a; Thor zostaje ojcem — Love pojawia się w Doomsday","","Faza 4 — po No Way Home"],
+["groot","I Am Groot (2 sezony shortów)","2022–23","anim","mcu",0.7,20220810,14,0,"krótkie, urocze przerywniki bez fabuły","","Faza 4 — po No Way Home"],
+["shehulk","She-Hulk: Attorney at Law","2022","serial","mcu",4.5,20220818,56,0,"komedia prawnicza łamiąca czwartą ścianę; powrót Daredevila","","Faza 4 — po No Way Home"],
+["wbn","Werewolf by Night","2022","special","mcu",0.9,20221007,59,0,"czarno-biały horror na Halloween; Man-Thing","","Faza 4 — po No Way Home"],
+["morbius","Morbius","2022","film","ssu",1.7,20220401,48.65,0,"tylko dla kompletystów","","Faza 4 — po No Way Home"],
+["bpwf","Black Panther: Wakanda Forever","2022","film","mcu",2.7,20221111,54,0,"pożegnanie Chadwicka Bosemana; debiut Namora i Riri","","Faza 4 — po No Way Home"],
+["gotghs","The Guardians of the Galaxy Holiday Special","2022","special","mcu",0.8,20221125,61,0,"świąteczny drobiazg z Kevinem Baconem","","Faza 4 — po No Way Home"],
+["amwq","Ant-Man and the Wasp: Quantumania","2023","film","mcu",2.1,20230217,63,0,"głębiny świata kwantowego; Kang na pełnym ekranie","","Faza 5"],
+["gotg3","Guardians of the Galaxy Vol. 3","2023","film","mcu",2.5,20230505,64,0,"domknięcie trylogii Strażników; historia Rocketa","","Faza 5"],
+["si","Secret Invasion","2023","serial","mcu",5,20230621,65,0,"Skrulle wśród nas; szpiegowski Fury po blipie","","Faza 5"],
+["loki2","Loki S2","2023","serial","mcu",5,20231005,67,1,"domyka wątek TVA przed Doomsday","","Faza 5"],
+["marvels","The Marvels","2023","film","mcu",1.8,20231110,66,1,"scena po napisach: Beast — pierwszy pomost do X-Men","","Faza 5"],
+["wi2","What If…? S2","2023","anim","mcu",4.5,20231222,68,0,"kolejna porcja wariantów; jest i odcinek świąteczny","","Faza 5"],
+["echo","Echo","2024","serial","mcu",4,20240109,55,0,"Maya po wydarzeniach z Hawkeye; Kingpin i korzenie Choctaw","","Faza 5"],
+["xm1","X-Men","2000","film","fox",1.7,20000714,43.05,1,"Stewart, McKellen i Marsden wracają w Doomsday","","X-Men i Deadpool — przed Deadpool & Wolverine"],
+["x2","X2","2003","film","fox",2.2,20030502,43.1,1,"Nightcrawler Cumminga — wraca w Doomsday","","X-Men i Deadpool — przed Deadpool & Wolverine"],
+["x3","X-Men: The Last Stand","2006","film","fox",1.7,20060526,43.15,0,"Beast Kelseya Grammera — też wraca","","X-Men i Deadpool — przed Deadpool & Wolverine"],
+["xow","X-Men Origins: Wolverine","2009","film","fox",1.8,20090501,43.2,0,"origin Logana; niesławny zaszyty Deadpool","","X-Men i Deadpool — przed Deadpool & Wolverine"],
+["xfc","X-Men: First Class","2011","film","fox",2.2,20110603,43.25,0,"lata 60.; młodzi Charles i Erik","","X-Men i Deadpool — przed Deadpool & Wolverine"],
+["wolv","The Wolverine","2013","film","fox",2.1,20130726,43.3,0,"Logan w Japonii","","X-Men i Deadpool — przed Deadpool & Wolverine"],
+["dofp","X-Men: Days of Future Past","2014","film","fox",2.2,20140523,43.35,1,"łączy oba składy X-Menów; klucz do obsady Doomsday","","X-Men i Deadpool — przed Deadpool & Wolverine"],
+["dp1","Deadpool","2016","film","fox",1.8,20160212,43.4,1,"obowiązkowe przed Deadpool & Wolverine","","X-Men i Deadpool — przed Deadpool & Wolverine"],
+["xapo","X-Men: Apocalypse","2016","film","fox",2.4,20160527,43.45,0,"lata 80. i Apocalypse","","X-Men i Deadpool — przed Deadpool & Wolverine"],
+["nogooddeed","Deadpool: No Good Deed","2017","short","fox",0.06,20170303,43.47,0,"krótkometrażówka wyświetlana w kinach przed Loganem","","X-Men i Deadpool — przed Deadpool & Wolverine"],
+["logan","Logan","2017","film","fox",2.3,20170303,43.5,0,"pożegnanie Jackmana i Stewarta; jedno z najlepszych","","X-Men i Deadpool — przed Deadpool & Wolverine"],
+["dp2","Deadpool 2","2018","film","fox",2,20180518,43.55,1,"obowiązkowe przed Deadpool & Wolverine","","X-Men i Deadpool — przed Deadpool & Wolverine"],
+["dphx","Dark Phoenix","2019","film","fox",1.9,20190607,43.6,0,"ostatni kinowy film ery Foxa o X-Menach","","X-Men i Deadpool — przed Deadpool & Wolverine"],
+["nm","The New Mutants","2020","film","fox",1.6,20200828,43.65,0,"horror o młodych mutantach, ofiara przejęcia Foxa","","X-Men i Deadpool — przed Deadpool & Wolverine"],
+["legion","Legion (3 sezony)","2017–19","serial","wyspy",22,20170208,43.42,0,"FX; luźno w świecie X-Men, totalnie osobne i wybitne","","X-Men i Deadpool — przed Deadpool & Wolverine"],
+["gifted","The Gifted (2 sezony)","2017–19","serial","wyspy",21,20171002,43.44,0,"Fox; rodzina mutantów w ukryciu — nic tego nie kontynuuje, samodzielne","","X-Men i Deadpool — przed Deadpool & Wolverine"],
+["xtas","X-Men: The Animated Series (5 sezonów)","1992–97","anim","fox",28,19921031,43.68,0,"kultowa kreskówka lat 90.; X-Men '97 to jej bezpośrednia kontynuacja","","X-Men i Deadpool — przed Deadpool & Wolverine"],
+["x97a","X-Men '97 S1","2024","anim","mcu",5,20240320,43.7,0,"kontynuacja kultowej kreskówki z lat 90.; poza główną osią czasu MCU","","X-Men i Deadpool — przed Deadpool & Wolverine"],
+["blade","Blade","1998","film","dwcameo",2,19980821,43.76,0,"Wesley Snipes wraca do roli w cameo w Deadpool & Wolverine","","Pomosty cameo — tuż przed Deadpool & Wolverine"],
+["blade2","Blade II","2002","film","dwcameo",2,20020322,43.77,0,"reż. Guillermo del Toro; najlepsza część trylogii","","Pomosty cameo — tuż przed Deadpool & Wolverine"],
+["blade3","Blade: Trinity","2004","film","dwcameo",1.9,20041208,43.78,0,"słabszy finał; u boku Snipesa młody Ryan Reynolds","","Pomosty cameo — tuż przed Deadpool & Wolverine"],
+["bladeseries","Blade: The Series","2006","serial","dwcameo",9,20060628,43.785,0,"kontynuacja filmowej trylogii; Sticky Fingaz jako Blade","","Pomosty cameo — tuż przed Deadpool & Wolverine"],
+["dd03","Daredevil","2003","film","dwcameo",1.7,20030214,43.79,0,"wersja z Benem Affleckiem; stąd wywodzi się Elektra","","Pomosty cameo — tuż przed Deadpool & Wolverine"],
+["elektra","Elektra","2005","film","dwcameo",1.6,20050114,43.795,0,"Jennifer Garner wraca do roli w cameo w Deadpool & Wolverine","","Pomosty cameo — tuż przed Deadpool & Wolverine"],
+["ff05","Fantastic Four","2005","film","dwcameo",1.8,20050708,43.8,0,"młody Chris Evans jako Johnny Storm — wraca do tej roli w cameo w Deadpool & Wolverine","","Pomosty cameo — tuż przed Deadpool & Wolverine"],
+["ff07","Fantastic Four: Rise of the Silver Surfer","2007","film","dwcameo",1.5,20070615,43.81,0,"Silver Surfer i Galactus — porównaj z First Steps","","Pomosty cameo — tuż przed Deadpool & Wolverine"],
+["dw","Deadpool & Wolverine","2024","film","mcu",2.1,20240726,44,1,"pożegnanie ery Foxa i mostek do MCU","","Faza 5 — finał"],
+["mweb","Madame Web","2024","film","ssu",1.9,20240214,48.92,0,"tylko dla kompletystów","","Faza 5 — finał"],
+["venom3","Venom: The Last Dance","2024","film","ssu",1.8,20241025,48.94,0,"finał trylogii Venoma","","Faza 5 — finał"],
+["kraven","Kraven the Hunter","2024","film","ssu",2.1,20241213,48.96,0,"zamyka uniwersum Sony (SSU)","","Faza 5 — finał"],
+["agatha","Agatha All Along","2024","serial","mcu",5.5,20240918,69,0,"środek trylogii Wandy i Visiona","","Faza 5 — finał"],
+["wi3","What If…? S3","2024","anim","mcu",4,20241222,70,0,"finał animowanej antologii","","Faza 5 — finał"],
+["yfnsm1","Your Friendly Neighborhood Spider-Man S1","2025","anim","mcu",5,20250129,25,0,"alternatywny, animowany Peter Parker","","Faza 5 — finał"],
+["cabnw","Captain America: Brave New World","2025","film","mcu",2,20250214,72,1,"Sam w akcji jako Kapitan; prezydent Ross zmienia kolor","","Faza 5 — finał"],
+["ddba1","Daredevil: Born Again S1","2025","serial","mcu",7,20250304,71,0,"bezpośrednia kontynuacja Daredevila z Netflixa","","Faza 5 — finał"],
+["tbolts","Thunderbolts*","2025","film","mcu",2.1,20250502,73,1,"tu rodzą się Nowi Avengers z Doomsday","","Faza 5 — finał"],
+["ironheart","Ironheart","2025","serial","mcu",5,20250624,60,0,"Riri po Wakanda Forever; pakt z bardzo mroczną siłą","","Faza 5 — finał"],
+["ff15","Fantastic Four (Fant4stic)","2015","film","wyspy",1.7,20150807,2.9,0,"najgorzej oceniana Czwórka — wchodzisz na własne ryzyko","","Fant4stic (2015) — wyspa"],
+["herop","Marvel's Hero Project","2019","dok","docs",7,20191112,78.1,0,"dzieciaki-bohaterowie realnego świata","","Dokumenty — zaplecze (opcjonalnie)"],
+["m616","Marvel's 616","2020","dok","docs",6.5,20201120,78.15,0,"antologia o kulturze i ludziach Marvela","","Dokumenty — zaplecze (opcjonalnie)"],
+["btm","Marvel's Behind the Mask","2021","dok","docs",1.1,20210212,78.2,0,"historia reprezentacji w komiksach Marvela","","Dokumenty — zaplecze (opcjonalnie)"],
+["assembled","Marvel Studios: Assembled (seria making-ofów)","2021–26","dok","docs",27,20210312,78.25,0,"kulisy niemal każdej produkcji MCU","","Dokumenty — zaplecze (opcjonalnie)"],
+["voices","Voices Rising: The Music of Wakanda Forever","2023","dok","docs",1,20230220,78.28,0,"muzyka Wakanda Forever od kulis","","Dokumenty — zaplecze (opcjonalnie)"],
+["stanlee","Stan Lee","2023","dok","docs",1.5,20230616,78.3,0,"dokument o Stanie na Disney+","","Dokumenty — zaplecze (opcjonalnie)"],
+["fffs","The Fantastic Four: First Steps","2025","film","mcu",1.9,20250725,3,1,"Ziemia-828, retro lata 60.; prowadzi wprost do Doomsday","","Faza 6 — prosto do Doomsday"],
+["eow","Eyes of Wakanda","2025","anim","mcu",2,20250806,1,0,"antologia: artefakty z wibranium przez wieki","","Faza 6 — prosto do Doomsday"],
+["zombies","Marvel Zombies","2025","anim","mcu",2,20250924,41,0,"krwawa, dorosła alternatywa","","Faza 6 — prosto do Doomsday"],
+["wonderman","Wonder Man","2026","serial","mcu",4.5,20260127,62,0,"satyra na Hollywood; Simon Williams","","Faza 6 — prosto do Doomsday"],
+["ddba2","Daredevil: Born Again S2","2026","serial","mcu",6.5,20260324,74,0,"wraca Jessica Jones","","Faza 6 — prosto do Doomsday"],
+["polk","The Punisher: One Last Kill","2026","special","mcu",1,20260512,75,0,"godzinny, brutalny specjal — stąd Frank rusza do Brand New Day","","Faza 6 — prosto do Doomsday"],
+["x97b","X-Men '97 S2","2026","anim","mcu",4.5,20260701,43.75,0,"w odc. 5 Morph zamienia się m.in. w Deadpoola i Spider-Mana","emisja do 12.08","Faza 6 — prosto do Doomsday"],
+["smbnd","Spider-Man: Brand New Day","2026","film","mcu",2.2,20260731,76,1,"38. film MCU; pojawia się Punisher","KINO · 31.07.2026","Faza 6 — prosto do Doomsday"],
+["vq","VisionQuest","2026","serial","mcu",5,20261014,77,1,"finał trylogii Wandy i Visiona; Bettany i Spader jako Ultron","Disney+ · 14.10.2026","Faza 6 — prosto do Doomsday"],
+["yfnsm2","Your Friendly Neighborhood Spider-Man S2","2026","anim","mcu",5,20261101,78,0,"ciąg dalszy alternatywnego, animowanego Petera","Disney+ · jesień 2026","Faza 6 — prosto do Doomsday"],
+["doom","Avengers: Doomsday","2026","film","mcu",3,20261218,79,1,"CEL: RDJ jako Doktor Doom; Avengers, Czwórka i X-Meni razem","KINO · 18.12.2026","Faza 6 — prosto do Doomsday"]
+];
+const DATA = RAW.map((r,i)=>({id:r[0],t:r[1],y:r[2],typ:r[3],pack:r[4],h:r[5],d:r[6],chr:r[7],star:!!r[8],n:r[9],up:r[10],sec:r[11],rec:(i+1)*10}));
+
+/* ====== TŁUMACZENIA ====== */
+const SEC_EN = {
+  "Prehistoria (1944–98) — pełny hardkor":"Prehistory (1944–98) — full hardcore",
+  "Dokumenty — zaplecze (opcjonalnie)":"Documentaries — behind the scenes (optional)",
+  "Kreskówki (1966–2020) — osobny ocean, oglądaj kiedykolwiek":"Cartoons (1966–2020) — a separate ocean, watch anytime",
+  "Antyki (2001–2012) — wyspy bez powiązań":"Oldies (2001–2012) — unconnected islands",
+  "Pomosty cameo — tuż przed Deadpool & Wolverine":"Cameo bridges — right before Deadpool & Wolverine",
+  "Saga Nieskończoności · Faza 1":"The Infinity Saga · Phase 1",
+  "Faza 2":"Phase 2",
+  "ABC / Hulu — półkanon (opcjonalnie)":"ABC / Hulu — semi-canon (optional)",
+  "Faza 2 — ciąg dalszy":"Phase 2 — continued",
+  "Faza 3":"Phase 3",
+  "Netflix: Defenders — most do Born Again":"Netflix: Defenders — the bridge to Born Again",
+  "Saga Multiwersum · Faza 4":"The Multiverse Saga · Phase 4",
+  "Pajęcze uniwersa — tuż przed No Way Home":"Spider universes — right before No Way Home",
+  "Faza 4 — po No Way Home":"Phase 4 — after No Way Home",
+  "Faza 5":"Phase 5",
+  "X-Men i Deadpool — przed Deadpool & Wolverine":"X-Men & Deadpool — before Deadpool & Wolverine",
+  "Faza 5 — finał":"Phase 5 — finale",
+  "Fant4stic (2015) — wyspa":"Fant4stic (2015) — an island",
+  "Faza 6 — prosto do Doomsday":"Phase 6 — straight into Doomsday"
+};
+const N_EN = {
+  dd03:"the Ben Affleck version; Elektra spins off from here",
+  hulk03:"Ang Lee's take — not the MCU yet",
+  im1:"where it all begins — RDJ, now Doctor Doom",
+  catws:"the Russo brothers — Doomsday's directors",
+  aos:"S1 intertwines with The Winter Soldier; then goes its own way",
+  aou:"the birth of Ultron — he returns in VisionQuest",
+  ddn1:"the minimum before Born Again: Daredevil 1–3 + Punisher",
+  if1:"the weakest-rated of the bunch",
+  wv:"start of the trilogy: WandaVision → Agatha → VisionQuest",
+  faws:"Sam takes up Captain America's shield",
+  loki1:"the foundation of the multiverse and the TVA",
+  bw:"Yelena and Red Guardian — the core of Thunderbolts",
+  hawkeye:"Kate Bishop's debut; Kingpin enters the MCU",
+  venom2:"the post-credits scene ties into No Way Home",
+  itsv:"an animated masterpiece; a separate universe",
+  atsv:"ends on a cliffhanger — the finale is coming",
+  spidernoir:"Sony live-action series on Prime Video; Cage as Spider-Noir; a standalone 1930s story",
+  smnwh:"the big payoff for Maguire, Garfield and Venom",
+  dsmom:"the multiverse and the Illuminati",
+  morbius:"completionists only",
+  loki2:"wraps up the TVA thread before Doomsday",
+  marvels:"post-credits: Beast — the first bridge to the X-Men",
+  xm1:"Stewart, McKellen and Marsden return in Doomsday",
+  x3:"Kelsey Grammer's Beast — also returning",
+  dofp:"unites both X-Men casts; key to the Doomsday lineup",
+  dp1:"mandatory before Deadpool & Wolverine",
+  logan:"Jackman and Stewart's farewell; one of the very best",
+  dp2:"mandatory before Deadpool & Wolverine",
+  x97a:"continuation of the cult '90s cartoon; outside the main MCU timeline",
+  legion:"FX; loosely in the X-Men world, fully standalone and brilliant",
+  gifted:"Fox; a mutant family in hiding — nothing continues it, fully standalone",
+  blade:"Wesley Snipes returns to the role in a Deadpool & Wolverine cameo",
+  elektra:"Jennifer Garner returns to the role in a Deadpool & Wolverine cameo",
+  dw:"a farewell to the Fox era and a bridge into the MCU",
+  mweb:"completionists only",
+  kraven:"closes out Sony's SSU universe",
+  agatha:"the middle of the Wanda/Vision trilogy",
+  yfnsm1:"an alternate, animated Peter Parker",
+  ddba1:"a direct continuation of Netflix's Daredevil",
+  tbolts:"where Doomsday's New Avengers are born",
+  ff05:"young Chris Evans as Johnny Storm — he returns to the role in a Deadpool & Wolverine cameo",
+  ff15:"the worst-rated Four — enter at your own risk",
+  fffs:"Earth-828, retro 1960s; leads straight into Doomsday",
+  ddba2:"Jessica Jones returns",
+  x97b:"in ep. 5 Morph turns into Deadpool and Spider-Man, among others",
+  smbnd:"the 38th MCU film; the Punisher shows up",
+  vq:"the finale of the Wanda/Vision trilogy; Bettany and Spader as Ultron",
+  doom:"THE GOAL: RDJ as Doctor Doom; the Avengers, the Four and the X-Men together",
+  howard:"Marvel's first theatrical film; a legendary flop, now a cult item; Howard later pops up in GotG",
+  pun89:"Dolph Lundgren as Frank Castle",
+  ff94:"never officially released — circulates as a bootleg; peak completionism",
+  genx:"a TV pilot about young mutants",
+  nickfury:"David Hasselhoff as Nick Fury",
+  manthing:"a B-movie horror; a completionist rarity",
+  os_consultant:"Coulson and Sitwell after the events of The Incredible Hulk",
+  os_funny:"Coulson en route to Thor's hammer",
+  os_carter:"Peggy after the war; the seed of the Agent Carter series",
+  os_item47:"a couple with a Chitauri gun after the Battle of New York",
+  os_king:"an Iron Man 3 epilogue; the Slattery thread returns in Shang-Chi",
+  os_teamthor:"mockumentaries: what Thor was up to during Civil War",
+  modok:"Hulu animated comedy; non-canon",
+  hulk77:"Bill Bixby and Lou Ferrigno — a TV classic",
+  hulktv:"Returns / Trial / Death; TV Thor guests in the first, Daredevil in the second",
+  aos_s1a:"kicks off after the Battle of New York; Coulson lives",
+  aos_s1c:"the direct Winter Soldier crossover — S.H.I.E.L.D. falls",
+  aos_s2b:"wraps up Age of Ultron threads",
+  aos_s3b:"the Civil War fallout",
+  aos_s4:"Ghost Rider (Robbie Reyes — not the Cage version) and LMDs; watch Slingshot between ep. 8 and 9",
+  gr1:"Nicolas Cage as Johnny Blaze — a different Ghost Rider than AoS's Robbie Reyes",
+  gr2:"more of Blaze; still its own continuity, unrelated to the show",
+  wz:"Lionsgate; released AFTER Iron Man, but not MCU — Punisher rights sat outside Marvel Studios back then",
+  slingshot:"6 micro-episodes about Yo-Yo (YouTube)",
+  aos_s5:"space and a time loop — the show breaks away from the films",
+  aos_s67:"the finale; wraps up alongside the Infinity War era",
+  whih:"fake in-universe news broadcasts (YouTube): 5 eps before Ant-Man, 5 before Civil War",
+  dailybugle:"J. Jonah's fake news (YouTube/TikTok); between Far From Home and No Way Home",
+  peterstodo:"a deleted Far From Home scene released as a One-Shot",
+  xtas:"the cult '90s cartoon; X-Men '97 is its direct continuation",
+  acarter:"after The First Avenger; the characters get loose closure in Agents of S.H.I.E.L.D. S7",
+  hitmonkey:"Hulu animation about an assassin monkey",
+  msh66:"Marvel's first animation ever; Cap, Hulk, Iron Man, Thor and Namor",
+  sm67:"the source of the pointing Spider-Men meme",
+  nff78:"the Human Torch swapped for the robot H.E.R.B.I.E.",
+  thing79:"Hanna-Barbera: a teenage Ben Grimm sharing a block with the Flintstones",
+  smaf:"Spidey, Iceman and Firestar — created just for this show",
+  hulk82:"the animated '80s Hulk",
+  pryde:"a failed pilot for an X-Men series",
+  smtas:"the beloved '90s Spider-Man; its finale is Spider-Verse before it was cool",
+  hulk96:"She-Hulk guest-stars",
+  ss98:"cut off on a cliffhanger after one season",
+  xevo:"the X-Men as high-schoolers; X-23 debuts here",
+  smmtv:"MTV's CGI take; Peter voiced by Neil Patrick Harris",
+  dtvfilms:"incl. Planet Hulk and Hulk Vs",
+  specsm:"for many the best animated Spider-Man; cancelled too soon",
+  imaa:"a teenage Tony Stark",
+  shs:"a comedy for younger viewers",
+  marvelanime:"Iron Man, Wolverine, X-Men and Blade by studio Madhouse",
+  aemh:"widely considered Marvel's best animated series",
+  hsmash:"the whole Hulk family in one show",
+  bh6:"Disney's take on a Marvel comic; Oscar winner",
+  cap44:"the first Marvel (then Timely) screen adaptation ever — Republic Pictures",
+  spidey74:"live-action Spider-Man sketches on CBS's educational show",
+  asm77:"Nicholas Hammond; two storylines were stitched into theatrical films",
+  toei:"the cult Japanese Spider-Man with the giant robot Leopardon; officially licensed",
+  cap79:"Reb Brown as Cap on a motorcycle",
+  powerpack:"an unaired pilot; circulates online",
+  nightman:"a Malibu Comics hero — a publisher owned by Marvel",
+  mutantx:"a pre-MCU Marvel Studios production; loosely mutant-flavored",
+  bladeseries:"a continuation of the film trilogy; Sticky Fingaz as Blade",
+  nogooddeed:"the short that played in theaters before Logan",
+  spiderwithin:"an official short about Miles' mental health",
+  ultraforce:"Malibu Comics heroes",
+  knights:"narrated motion comics — incl. Whedon's Astonishing X-Men",
+  bp2010:"Djimon Hounsou as T'Challa",
+  tvcrossovers:"a Phineas and Ferb crossover + two TV movies",
+  lego:"from Maximum Overload to Mission Demolition",
+  heroesunited:"Iron Man & Hulk / Iron Man & Captain America",
+  microshorts:"promotional Disney XD and Funko shorts",
+  shadv:"Spidey for the youngest",
+  rising:"Secret Warriors plus five specials",
+  spidey21:"the preschool show — on the list anyway, because everything means everything",
+  baymax:"Disney's continuation of Big Hero 6",
+  moongirl:"Lunella and her T-Rex; critically loved",
+  herop:"real-world kid heroes",
+  assembled:"behind the scenes of nearly every MCU production",
+  stanlee:"the Stan Lee documentary on Disney+",
+  hulk08:"Norton's only outing; Ross and Blonsky return years later",
+  im2:"Black Widow's debut; Howard Stark and the Expo",
+  thor1:"the debut of Thor, Loki and Hawkeye",
+  catfa:"the start of the MCU timeline; Steve, Peggy and the Tesseract",
+  avg1:"the first big team-up; the Battle of New York",
+  im3:"Tony after New York; the Mandarin twist pays off in Shang-Chi",
+  tdw:"the Reality Stone; key Loki scenes",
+  gotg1:"the MCU's cosmic branch; the Power Stone",
+  antman1:"the Quantum Realm's rules — the foundation for Endgame",
+  cacw:"Avengers vs Avengers; Black Panther's and Spider-Man's debuts",
+  ds1:"magic enters the MCU; the Time Stone",
+  gotg2:"Ego and Peter's real family",
+  smh:"the first solo MCU Spider-Man; Vulture",
+  thor3:"Thor reinvented; Hulk on Sakaar; leads straight into Infinity War",
+  bp1:"Wakanda and Killmonger; a cultural phenomenon",
+  aiw:"part one of the grand finale; the snap",
+  amw:"runs right up against Infinity War — the post-credits scene is key",
+  cm:"the '90s; how Fury learned about the cosmos and got the pager",
+  ae:"the Infinity Saga finale; time travel cracks open the multiverse",
+  smffh:"a world grieving after Endgame; Mysterio; the post-credits scene changes everything",
+  wi1:"animated what-ifs of familiar stories; the Watcher debuts",
+  shangchi:"the Ten Rings; closes the Mandarin thread from Iron Man 3",
+  eternals:"cosmic scale and the Celestials; the fallout lingers in the MCU",
+  mk:"Oscar Isaac times two; Egyptian gods; a standalone story",
+  msm:"Kamala Khan's debut; the finale drops the m-word",
+  thor4:"Bale's Gorr; Thor becomes a dad — Love shows up in Doomsday",
+  groot:"short, adorable palate cleansers, no plot",
+  shehulk:"a fourth-wall-breaking legal comedy; Daredevil returns",
+  wbn:"a black-and-white Halloween horror; Man-Thing",
+  bpwf:"a farewell to Chadwick Boseman; Namor's and Riri's debuts",
+  gotghs:"a Christmas trifle with Kevin Bacon",
+  amwq:"deep into the Quantum Realm; Kang front and center",
+  gotg3:"the Guardians trilogy's close; Rocket's story",
+  si:"Skrulls among us; a spy-thriller Fury after the blip",
+  wi2:"another round of variants; incl. a holiday episode",
+  echo:"Maya after Hawkeye; Kingpin and Choctaw roots",
+  wi3:"the animated anthology's finale",
+  cabnw:"Sam in action as Cap; President Ross changes color",
+  ironheart:"Riri after Wakanda Forever; a deal with a very dark force",
+  wonderman:"a Hollywood satire; Simon Williams",
+  polk:"a brutal one-hour special — Frank heads into Brand New Day from here",
+  yfnsm2:"more of the alternate animated Peter",
+  eow:"an anthology: vibranium artifacts across the ages",
+  zombies:"a bloody, grown-up alternate take",
+  jj1:"Tennant's Kilgrave — one of Marvel's best villains",
+  ddn2:"the debut of Bernthal's Punisher and Elektra",
+  lc1:"Harlem's bulletproof hero",
+  def:"the four Defenders' crossover",
+  pun1:"solo Frank; war trauma and revenge",
+  jj2:"Jessica versus her own past",
+  lc2:"Bushmaster and the fight for Harlem",
+  if2:"Danny's shorter, tighter season",
+  ddn3:"Bullseye and Fisk's return; the Netflix era's peak",
+  pun2:"Frank's last solo round before the hiatus",
+  jj3:"the finale of the entire Netflix era",
+  x2:"Cumming's Nightcrawler — returning in Doomsday",
+  xow:"Logan's origin; the infamous sewn-shut Deadpool",
+  xfc:"the 1960s; young Charles and Erik",
+  wolv:"Logan in Japan",
+  xapo:"the 1980s and Apocalypse",
+  dphx:"the Fox era's last theatrical X-Men film",
+  nm:"a young-mutant horror, a casualty of the Fox buyout",
+  sm1:"Dafoe's Green Goblin — he returns in No Way Home",
+  sm2:"Molina's Doc Ock; for many the best Spider-Man film",
+  sm3:"Sandman and the symbiote; yes, that dance",
+  tasm:"Garfield and the Lizard — both return in NWH",
+  tasm2:"Foxx's Electro returns in NWH; Gwen's fate",
+  venom:"the birth of the Eddie–symbiote duo",
+  venom3:"the Venom trilogy's finale",
+  ff67:"Hanna-Barbera's classic Four",
+  sw79:"Marvel's first heroine with her own show",
+  sm81:"the solo precursor to Amazing Friends",
+  im94:"half of the Marvel Action Hour block",
+  ffanim:"the other half of the Marvel Action Hour",
+  smu99:"Spider-Man on Counter-Earth",
+  avuts:"the Avengers minus the big three",
+  ffwgh:"the stylish 2000s Four",
+  watx:"alternate X-Men; cut after one season",
+  usm:"comedy and fourth-wall breaks",
+  avass:"EMH's successor, closer to the films' style",
+  gotganim:"the Guardians riding the films' success",
+  sm17:"Peter in an academy; close to the games and comics",
+  bh6s:"more adventures of Hiro and Baymax",
+  ds78:"a TV attempt at launching Strange",
+  cap90:"a theatrical flop with rubber ears",
+  aos_s1b:"the hunt for Deathlok and the T.A.H.I.T.I. mystery",
+  aos_s2a:"the Inhumans enter the picture; Skye's secret",
+  aos_s3a:"the Secret Warriors and Hive",
+  inhumans:"the Inhuman royal family; mythology shared with AoS",
+  runaways:"teens versus their supervillain parents; a Cloak & Dagger crossover",
+  cdag:"two teens bound by their powers; a Runaways crossover",
+  m616:"an anthology on Marvel's culture and people",
+  btm:"the history of representation in Marvel comics",
+  voices:"the making of Wakanda Forever's music",
+  pun04:"Thomas Jane as Frank Castle",
+  helstrom:"a dark horror from the abandoned Adventure into Fear label",
+  blade2:"directed by Guillermo del Toro; the trilogy's best",
+  blade3:"a weaker finale; young Ryan Reynolds alongside Snipes",
+  ff07:"Silver Surfer and Galactus — compare with First Steps"
+};
+const UP_EN = { x97b:"airing until Aug 12", smbnd:"THEATERS · Jul 31, 2026", vq:"Disney+ · Oct 14, 2026", yfnsm2:"Disney+ · Fall 2026", doom:"THEATERS · Dec 18, 2026" };
+const UI = {
+ pl:{
+  title:"MarvelBinge Tracker — filmy i seriale Marvela",
+  eyebrow:"Cel: Avengers: Doomsday · kina · 18 grudnia 2026",
+  h1:'MarvelBinge <span class="red">Tracker</span>',
+  sub:"Odhaczaj, co już za Tobą. Wybierz kolejność i pakiety spoza MCU — licznik godzin i tempo tygodniowe przeliczą się same. Postęp zapisuje się automatycznie w tej przeglądarce.",
+  lblDays:"dni do premiery", lblWeeks:"pełnych tygodni", lblPace:"godz./tydzień, by zdążyć",
+  order:"Kolejność oglądania", packs:"Pakiety (włącz / wyłącz)", filters:"Filtry",
+  modeRec:"Polecana", modePrem:"Premiery", modeChr:"Chronologia",
+  hintRec:"Kolejność premier MCU + pakiety wpięte tam, gdzie dają najwięcej frajdy.",
+  hintPrem:"Wszystko dokładnie tak, jak trafiało do kin i na streaming.",
+  hintChr:"Według wewnętrznej osi czasu — uwaga, ta kolejność zdradza część niespodzianek.",
+  fstar:"Pokaż tylko kluczowe przed Doomsday (★)", fhide:"Ukryj już obejrzane",
+  empty:"Nic tu nie ma — włącz jakiś pakiet albo wyłącz filtry.",
+  footer:"Czasy trwania są przybliżone. Daty przyszłych premier mogą się zmienić — stan na lipiec 2026.",
+  reset:"Wyczyść postęp", confirmReset:"Wyczyścić cały zapisany postęp (odhaczenia)?",
+  ariaWatched:"Obejrzane: ", chipItems:"poz.",
+  presets:"Szybkie zestawy", psMcu:"Samo MCU", psConn:"Wszystko powiązane", psAll:"Absolutnie wszystko",
+  notesTitle:"Notki przy pozycjach", nOff:"Schowane", nClick:"Na klik", nAll:"Widoczne", showNote:"ⓘ pokaż notkę",
+  nHintOff:"Czysta lista — zero opisów.", nHintClick:"Odkrywasz pojedynczo — bezpiecznie od spoilerów.", nHintAll:"Wszystko widoczne — opisy mogą zdradzać niespodzianki.",
+  progress:function(a,b,p,x,y){return "Obejrzane: "+a+" z "+b+" pozycji ("+p+"%) · "+x+" h z ~"+y+" h w wybranych pakietach";},
+  sumMain:function(r,p){return "Zostało <b>"+r+" h</b> · tempo: <b>"+p+" h/tydz.</b>";},
+  sumSub:function(d,n){return d+" dni do Doomsday · "+n+" pozycji w planie";}
+ },
+ en:{
+  title:"MarvelBinge Tracker — a Marvel watchlist",
+  eyebrow:"Target: Avengers: Doomsday · theaters · December 18, 2026",
+  h1:'MarvelBinge <span class="red">Tracker</span>',
+  sub:"Check off what you've watched. Pick an order and toggle the non-MCU packs — the hour counter and weekly pace update on their own. Progress saves automatically in this browser.",
+  lblDays:"days to release", lblWeeks:"full weeks", lblPace:"hours/week to make it",
+  order:"Viewing order", packs:"Packs (toggle on / off)", filters:"Filters",
+  modeRec:"Recommended", modePrem:"Release", modeChr:"Timeline",
+  hintRec:"MCU release order + the extra packs slotted where they pay off best.",
+  hintPrem:"Everything exactly as it hit theaters and streaming.",
+  hintChr:"By in-universe chronology — careful, this order spoils a few surprises.",
+  fstar:"Show only the Doomsday essentials (★)", fhide:"Hide watched",
+  empty:"Nothing here — enable a pack or clear the filters.",
+  footer:"Runtimes are approximate. Future release dates may change — accurate as of July 2026.",
+  reset:"Reset progress", confirmReset:"Clear all saved progress (checkmarks)?",
+  ariaWatched:"Watched: ", chipItems:"items",
+  presets:"Quick sets", psMcu:"MCU only", psConn:"Everything connected", psAll:"Absolutely everything",
+  notesTitle:"Per-title notes", nOff:"Hidden", nClick:"Tap to reveal", nAll:"Visible", showNote:"ⓘ show note",
+  nHintOff:"A clean list — no descriptions.", nHintClick:"Reveal one by one — spoiler-safe.", nHintAll:"All visible — notes may spoil surprises.",
+  progress:function(a,b,p,x,y){return "Watched: "+a+" of "+b+" titles ("+p+"%) · "+x+" h of ~"+y+" h in selected packs";},
+  sumMain:function(r,p){return "<b>"+r+" h</b> left · pace: <b>"+p+" h/wk</b>";},
+  sumSub:function(d,n){return d+" days to Doomsday · "+n+" titles planned";}
+ }
+};
+
+/* ====== STAN + PAMIĘĆ (Claude LUB zwykła przeglądarka) ====== */
+const KEY="droga-do-doomsday-v1";
+const state={ mode:"rec", lang:"pl",
+  packs:Object.fromEntries(Object.entries(PACKS).map(function(e){return [e[0],e[1].on];})),
+  fstar:false, fhide:false, notes:"click", watched:new Set() };
+const revealed=new Set();
+const store={
+  async get(k){
+    try{ if(window.storage){ const r=await window.storage.get(k); return (r&&r.value)?r.value:null; } }catch(e){}
+    try{ return localStorage.getItem(k); }catch(e){}
+    return null;
+  },
+  async set(k,v){
+    try{ if(window.storage){ await window.storage.set(k,v); return; } }catch(e){}
+    try{ localStorage.setItem(k,v); }catch(e){}
+  }
+};
+let saveTimer=null;
+function scheduleSave(){
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(function(){
+    const payload=JSON.stringify({mode:state.mode,lang:state.lang,packs:state.packs,fstar:state.fstar,fhide:state.fhide,notes:state.notes,w:Array.from(state.watched)});
+    store.set(KEY,payload);
+  },350);
+}
+async function loadSaved(){
+  try{
+    const v=await store.get(KEY);
+    if(v){
+      const s=JSON.parse(v);
+      if(s.mode) state.mode=s.mode;
+      if(s.lang==="pl"||s.lang==="en") state.lang=s.lang;
+      if(s.packs) for(const k in state.packs) if(k in s.packs) state.packs[k]=!!s.packs[k];
+      state.fstar=!!s.fstar; state.fhide=!!s.fhide;
+      if(s.notes==="off"||s.notes==="click"||s.notes==="all") state.notes=s.notes;
+      state.watched=new Set(Array.isArray(s.w)?s.w:[]);
+    }
+  }catch(e){}
+}
+
+/* ====== POMOCNICZE ====== */
+const $=function(q){return document.querySelector(q);};
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function LOC(){return state.lang==="pl"?"pl-PL":"en-US";}
+function fh(h){ if(h<1) return Math.round(h*60)+" min"; return "~"+(Math.round(h*10)/10).toLocaleString(LOC())+" h"; }
+function fh0(h){ return Math.round(h).toLocaleString(LOC()); }
+const TARGET=new Date(2026,11,18);
+function daysLeft(){ return Math.max(0,Math.ceil((TARGET-new Date())/86400000)); }
+const tSec=function(s){return state.lang==="en"?(SEC_EN[s]||s):s;};
+const tNote=function(i){return state.lang==="en"?(N_EN[i.id]||i.n):i.n;};
+const tUp=function(i){return state.lang==="en"?(UP_EN[i.id]||i.up):i.up;};
+
+/* ====== JĘZYK ====== */
+function applyLang(){
+  const t=UI[state.lang];
+  document.documentElement.lang=state.lang;
+  document.title=t.title;
+  $("#t-eyebrow").textContent=t.eyebrow;
+  $("#t-h1").innerHTML=t.h1;
+  $("#t-sub").textContent=t.sub;
+  $("#lbl-days").textContent=t.lblDays;
+  $("#lbl-weeks").textContent=t.lblWeeks;
+  $("#lbl-pace").textContent=t.lblPace;
+  $("#t-order").textContent=t.order;
+  $("#t-packs").textContent=t.packs;
+  $("#t-filters").textContent=t.filters;
+  $("#mode-rec").textContent=t.modeRec;
+  $("#mode-prem").textContent=t.modePrem;
+  $("#mode-chr").textContent=t.modeChr;
+  $("#t-fstar").textContent=t.fstar;
+  $("#t-fhide").textContent=t.fhide;
+  $("#empty").textContent=t.empty;
+  $("#t-footer").textContent=t.footer;
+  $("#reset").textContent=t.reset;
+  $("#t-presets").textContent=t.presets;
+  $("#ps-mcu").textContent=t.psMcu;
+  $("#ps-conn").textContent=t.psConn;
+  $("#ps-all").textContent=t.psAll;
+  $("#t-notes").textContent=t.notesTitle;
+  $("#n-off").textContent=t.nOff;
+  $("#n-click").textContent=t.nClick;
+  $("#n-all").textContent=t.nAll;
+  $("#langbtn").textContent=(state.lang==="pl")?"EN":"PL";
+}
+
+/* ====== RENDER ====== */
+function sortKey(i){ return state.mode==="rec"?i.rec:(state.mode==="prem"?i.d:i.chr); }
+function render(){
+  const t=UI[state.lang];
+  $("#mode-rec").classList.toggle("active",state.mode==="rec");
+  $("#mode-prem").classList.toggle("active",state.mode==="prem");
+  $("#mode-chr").classList.toggle("active",state.mode==="chr");
+  $("#seg-hint").textContent=(state.mode==="rec")?t.hintRec:((state.mode==="prem")?t.hintPrem:t.hintChr);
+  $("#f-star").checked=state.fstar;
+  $("#f-hide").checked=state.fhide;
+  $("#n-off").classList.toggle("active",state.notes==="off");
+  $("#n-click").classList.toggle("active",state.notes==="click");
+  $("#n-all").classList.toggle("active",state.notes==="all");
+  $("#notes-hint").textContent=(state.notes==="off")?t.nHintOff:((state.notes==="click")?t.nHintClick:t.nHintAll);
+  renderChips();
+  const items=DATA
+    .filter(function(i){return state.packs[i.pack];})
+    .filter(function(i){return !state.fstar||i.star;})
+    .filter(function(i){return !state.fhide||!state.watched.has(i.id);})
+    .sort(function(a,b){return sortKey(a)-sortKey(b);});
+  let html="",lastHead=null;
+  for(const i of items){
+    let head=null;
+    if(state.mode==="rec") head=tSec(i.sec);
+    else if(state.mode==="prem") head=String(i.d).slice(0,4);
+    if(head&&head!==lastHead){ html+='<div class="sec-h">'+esc(head)+"</div>"; lastHead=head; }
+    const done=state.watched.has(i.id);
+    const note=tNote(i), up=tUp(i);
+    html+=
+      '<div class="item'+(done?" watched":"")+'" style="border-left-color:'+PACKS[i.pack].color+'">'+
+        '<input type="checkbox" data-id="'+i.id+'"'+(done?" checked":"")+' aria-label="'+t.ariaWatched+esc(i.t)+'">'+
+        '<div class="t-body">'+
+          '<div class="t-title">'+(i.star?'<span class="star">★ </span>':"")+esc(i.t)+"</div>"+
+          '<div class="t-meta">'+
+            '<span class="badge">'+esc(i.y)+"</span>"+
+            '<span class="badge">'+TYP[i.typ][state.lang]+"</span>"+
+            '<span class="badge">'+fh(i.h)+"</span>"+
+            (i.pack!=="mcu"?'<span class="badge">'+esc(PACKS[i.pack][state.lang])+"</span>":"")+
+            (up?'<span class="badge up">'+esc(up)+"</span>":"")+
+          "</div>"+
+          (note&&state.notes!=="off"?((state.notes==="all"||revealed.has(i.id))?'<div class="t-note">'+esc(note)+"</div>":'<button class="notebtn" data-note="'+i.id+'">'+t.showNote+"</button>"):"")+
+        "</div>"+
+      "</div>";
+  }
+  $("#list").innerHTML=html;
+  $("#empty").style.display=items.length?"none":"block";
+  updateSummary();
+}
+function renderChips(){
+  const t=UI[state.lang];
+  let html="";
+  for(const k in PACKS){
+    const p=PACKS[k];
+    const its=DATA.filter(function(i){return i.pack===k;});
+    const hrs=its.reduce(function(s,i){return s+i.h;},0);
+    html+=
+      '<button class="chip'+(state.packs[k]?" on":"")+'" data-pack="'+k+'" aria-pressed="'+state.packs[k]+'">'+
+      '<span class="dot" style="background:'+p.color+'"></span>'+esc(p[state.lang])+
+      " <small>· "+its.length+" "+t.chipItems+" · "+fh0(hrs)+" h</small></button>";
+  }
+  $("#packchips").innerHTML=html;
+}
+function updateSummary(){
+  const t=UI[state.lang];
+  const scope=DATA.filter(function(i){return state.packs[i.pack];});
+  const totH=scope.reduce(function(s,i){return s+i.h;},0);
+  const wItems=scope.filter(function(i){return state.watched.has(i.id);});
+  const wH=wItems.reduce(function(s,i){return s+i.h;},0);
+  const remH=Math.max(0,totH-wH);
+  const dni=daysLeft();
+  const tyg=Math.max(dni/7,0.15);
+  const pace=(Math.round(remH/tyg*10)/10).toLocaleString(LOC());
+  const pct=totH?Math.round(wH/totH*100):0;
+  $("#cd-days").textContent=dni;
+  $("#cd-weeks").textContent=Math.floor(dni/7);
+  $("#cd-pace").textContent=pace;
+  $("#pbar").style.width=pct+"%";
+  $("#plabel").textContent=t.progress(wItems.length,scope.length,pct,fh0(wH),fh0(totH));
+  $("#sum-main").innerHTML=t.sumMain(fh0(remH),pace);
+  $("#sum-sub").textContent=t.sumSub(dni,scope.length);
+}
+
+/* ====== ZDARZENIA ====== */
+$("#list").addEventListener("change",function(e){
+  const cb=e.target.closest("input[data-id]");
+  if(!cb) return;
+  const id=cb.dataset.id;
+  if(cb.checked) state.watched.add(id); else state.watched.delete(id);
+  scheduleSave();
+  if(state.fhide){ render(); return; }
+  cb.closest(".item").classList.toggle("watched",cb.checked);
+  updateSummary();
+});
+$("#packchips").addEventListener("click",function(e){
+  const chip=e.target.closest("[data-pack]");
+  if(!chip) return;
+  state.packs[chip.dataset.pack]=!state.packs[chip.dataset.pack];
+  scheduleSave(); render();
+});
+$("#mode-rec").addEventListener("click",function(){state.mode="rec";scheduleSave();render();});
+$("#mode-prem").addEventListener("click",function(){state.mode="prem";scheduleSave();render();});
+$("#mode-chr").addEventListener("click",function(){state.mode="chr";scheduleSave();render();});
+$("#f-star").addEventListener("change",function(e){state.fstar=e.target.checked;scheduleSave();render();});
+$("#f-hide").addEventListener("change",function(e){state.fhide=e.target.checked;scheduleSave();render();});
+$("#langbtn").addEventListener("click",function(){
+  state.lang=(state.lang==="pl")?"en":"pl";
+  scheduleSave(); applyLang(); render();
+});
+function applyPreset(list){ for(const k in state.packs) state.packs[k]=list.indexOf(k)>=0; scheduleSave(); render(); }
+$("#ps-mcu").addEventListener("click",function(){applyPreset(["mcu","oneshots"]);});
+$("#ps-conn").addEventListener("click",function(){applyPreset(["mcu","netflix","fox","sony","ssu","dwcameo","abc","oneshots"]);});
+$("#ps-all").addEventListener("click",function(){applyPreset(Object.keys(PACKS));});
+$("#n-off").addEventListener("click",function(){state.notes="off";scheduleSave();render();});
+$("#n-click").addEventListener("click",function(){state.notes="click";scheduleSave();render();});
+$("#n-all").addEventListener("click",function(){state.notes="all";scheduleSave();render();});
+$("#list").addEventListener("click",function(e){
+  const b=e.target.closest(".notebtn");
+  if(!b) return;
+  const id=b.dataset.note;
+  revealed.add(id);
+  const it=DATA.find(function(x){return x.id===id;});
+  if(!it) return;
+  const div=document.createElement("div");
+  div.className="t-note";
+  div.textContent=tNote(it);
+  b.replaceWith(div);
+});
+$("#reset").addEventListener("click",function(){
+  if(confirm(UI[state.lang].confirmReset)){ state.watched.clear(); scheduleSave(); render(); }
+});
+
+/* ====== START ====== */
+applyLang(); render();
+loadSaved().then(function(){
+  const q=new URLSearchParams(location.search).get("lang");
+  if(q==="en"||q==="pl") state.lang=q;
+  applyLang(); render();
+});
+})();
+</script>
+</body>
+</html>
