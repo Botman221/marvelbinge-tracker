@@ -14,8 +14,8 @@ Odhaczaj obejrzane tytuły, wybieraj kolejność, włączaj i wyłączaj całe p
 - **Następne w kolejce** — kolejny tytuł z Twojej kolejności, odhaczany jednym kliknięciem
 - **Pasek planu** — cały plan na jednym pasku: każda kreska to tytuł, a jej szerokość to czas trwania
 - **Trzy kolejności oglądania** — polecana, według premier i chronologiczna
-- **Pakiety do włączania i wyłączania** — od samego MCU po absolutnie wszystko, z gotowymi zestawami
-- **Tryb „pod Doomsday”** — tylko tytuły kluczowe (★) albo oficjalna lista Disney+ „Countdown to Avengers: Doomsday”
+- **Podział na wagę** — każdy pakiet jest obowiązkowy, wart obejrzenia albo „na kiedyś”; domyślnie plan pokazuje tylko obowiązkowe (237 h do Doomsday zamiast ponad 1500 h), resztę włączasz jednym kliknięciem
+- **Tryb „pod Doomsday”** — krótsza ścieżka z tytułów kluczowych (★) albo oficjalna lista Disney+ „Countdown to Avengers: Doomsday”
 - **Wyszukiwarka** — po tytule oryginalnym lub polskim, także bez polskich znaków
 - **Zwijane sekcje** z paskiem postępu i polem, które odhacza całą sekcję naraz
 - **Twoje tempo** — liczone z ostatnich dwóch tygodni, z przewidywaną datą końca

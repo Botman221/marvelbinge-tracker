@@ -14,8 +14,8 @@ Check off what you've watched, pick a viewing order, and toggle whole packs on o
 - **Up next** — the next title in your order, marked watched with one tap
 - **Plan strip** — your whole plan as one bar: each stripe is a title, its width is the runtime
 - **Three viewing orders** — recommended, by release, and chronological
-- **Toggleable packs** — from MCU-only to absolutely everything, with one-tap quick sets
-- **Doomsday focus** — show only the essentials (★) or Disney+'s official “Countdown to Avengers: Doomsday” list
+- **Weighted packs** — every pack is essential, worth it or “someday”; by default the plan shows only the essentials (237 h to Doomsday instead of 1,500+), and the rest is one tap away
+- **Doomsday focus** — a shorter path through the key titles (★) or Disney+'s official “Countdown to Avengers: Doomsday” list
 - **Search** — by original or Polish title, with or without diacritics
 - **Collapsible sections** with progress bars and a checkbox that marks a whole section at once
 - **Your pace** — worked out from the last two weeks, with a likely finish date

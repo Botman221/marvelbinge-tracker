@@ -26,9 +26,9 @@
   --text:#F2F0E9; --muted:#A9B3D3; --faint:#7D89B0;
   --red:#F0232B; --red-ink:#fff; --yellow:#FFD23F; --cyan:#3CC8F5; --star:#FFD23F;
   --cap-shadow:rgba(0,0,0,.55); --scrim:rgba(5,8,20,.62);
-  --p-mcu:#F0323A; --p-netflix:#9D74FF; --p-fox:#F5B700; --p-sony:#3D8BF2; --p-ssu:#2FBF6C;
-  --p-dwcameo:#14C2D6; --p-abc:#9AA6B8; --p-oneshots:#EC5AAE; --p-wyspy:#1FB5A3; --p-antyki:#7C879A;
-  --p-prehist:#B48A55; --p-kresk:#F5823B; --p-docs:#97CC2E;
+  --p-mcu:#F0323A; --p-dd:#9D74FF; --p-fox:#F5B700; --p-sony:#3D8BF2; --p-mcuplus:#FF8C8C; --p-netflix:#C9B0FF;
+  --p-mcuside:#C77B86; --p-foxrest:#C4A55E; --p-sverse:#14C2D6; --p-ssu:#2FBF6C; --p-abc:#9AA6B8; --p-oneshots:#EC5AAE;
+  --p-wyspy:#1FB5A3; --p-antyki:#7C879A; --p-prehist:#B48A55; --p-kresk:#F5823B; --p-docs:#97CC2E;
   --tb:112px;
   color-scheme:dark;
 }
@@ -37,8 +37,8 @@
     --bg:#E9E7E0; --bg2:#F4F3EE; --bg3:#FFFFFF; --line:#CDC8BC; --line2:#B3AD9F;
     --text:#231F20; --muted:#5B5650; --faint:#7E786F;
     --red:#D3141B; --cyan:#0A7FB8; --star:#C98A00; --cap-shadow:#231F20; --scrim:rgba(35,31,32,.45);
-    --p-mcu:#D9232B; --p-netflix:#7A4FE0; --p-fox:#D99A00; --p-sony:#1F6FD6; --p-ssu:#1E9E55;
-    --p-dwcameo:#0A9DB0; --p-abc:#7B8797; --p-oneshots:#CE3A90; --p-wyspy:#0E9384; --p-antyki:#5F6979;
+    --p-mcu:#D9232B; --p-dd:#7A4FE0; --p-fox:#D99A00; --p-sony:#1F6FD6; --p-ssu:#1E9E55; --p-mcuplus:#E0605F; --p-netflix:#A688EC;
+    --p-mcuside:#A35865; --p-foxrest:#9A7D3C; --p-sverse:#0A9DB0; --p-abc:#7B8797; --p-oneshots:#CE3A90; --p-wyspy:#0E9384; --p-antyki:#5F6979;
     --p-prehist:#94703F; --p-kresk:#E0651C; --p-docs:#6E9E14;
     color-scheme:light;
   }
@@ -47,8 +47,8 @@
   --bg:#E9E7E0; --bg2:#F4F3EE; --bg3:#FFFFFF; --line:#CDC8BC; --line2:#B3AD9F;
   --text:#231F20; --muted:#5B5650; --faint:#7E786F;
   --red:#D3141B; --cyan:#0A7FB8; --star:#C98A00; --cap-shadow:#231F20; --scrim:rgba(35,31,32,.45);
-  --p-mcu:#D9232B; --p-netflix:#7A4FE0; --p-fox:#D99A00; --p-sony:#1F6FD6; --p-ssu:#1E9E55;
-  --p-dwcameo:#0A9DB0; --p-abc:#7B8797; --p-oneshots:#CE3A90; --p-wyspy:#0E9384; --p-antyki:#5F6979;
+  --p-mcu:#D9232B; --p-dd:#7A4FE0; --p-fox:#D99A00; --p-sony:#1F6FD6; --p-ssu:#1E9E55; --p-mcuplus:#E0605F; --p-netflix:#A688EC;
+  --p-mcuside:#A35865; --p-foxrest:#9A7D3C; --p-sverse:#0A9DB0; --p-abc:#7B8797; --p-oneshots:#CE3A90; --p-wyspy:#0E9384; --p-antyki:#5F6979;
   --p-prehist:#94703F; --p-kresk:#E0651C; --p-docs:#6E9E14;
   color-scheme:light;
 }
@@ -173,6 +173,16 @@ svg{flex:none}
 .pack-name{font-weight:600;font-size:.9375rem;line-height:1.25}
 .pack-num{font-size:.78rem;line-height:1.3;color:var(--muted);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
 .pack-desc{grid-column:2/4;font-size:.78rem;color:var(--muted);line-height:1.35}
+.tier+.tier{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line2)}
+.tier-h{display:flex;align-items:center;gap:8px;padding:3px 6px;font-weight:800;font-size:.9375rem}
+.tier-h small{font-weight:500;color:var(--muted);font-size:.8125rem;font-variant-numeric:tabular-nums}
+.tier-desc{font-size:.8125rem;color:var(--muted);line-height:1.45;margin:1px 6px 6px}
+details.tier>summary{list-style:none;cursor:pointer;border-radius:4px}
+details.tier>summary::-webkit-details-marker{display:none}
+details.tier>summary:hover{background:var(--bg2)}
+details.tier>summary .chev{width:18px;height:18px;margin-left:auto;transition:transform .15s}
+details.tier[open]>summary .chev{transform:rotate(180deg)}
+.pill small{display:block;font-weight:500;font-size:.75rem;opacity:.8;font-variant-numeric:tabular-nums;margin-top:1px}
 .radios{display:grid;gap:4px}
 .radio{display:flex;align-items:center;gap:10px;padding:8px 8px;border-radius:4px;text-align:left;font-weight:600;font-size:.9375rem}
 .radio:hover{background:var(--bg2)}
@@ -291,6 +301,10 @@ details.more[open] summary svg{transform:rotate(180deg)}
 .tag.off{border-color:var(--cyan);color:var(--cyan)}
 .tag.up{background:var(--yellow);border-color:var(--yellow);color:#231F20}
 .tag.soon{border-color:var(--star);color:var(--star)}
+.tag.t2{border-color:var(--muted)}
+.tag.t3{border-style:dashed;border-color:var(--faint);color:var(--muted)}
+.cap-meta .tier{border:1px solid currentColor;border-radius:3px;padding:0 5px}
+.cap-meta .tier.t3{border-style:dashed}
 .it-h{font-size:.875rem;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap;padding-top:3px}
 .it-note{grid-column:2/4;margin-top:6px;font-size:.9rem;line-height:1.45;color:var(--text);opacity:.9;border-left:2px solid var(--line2);padding-left:10px}
 .note-btn{font-size:.8125rem;font-weight:600;color:var(--muted);display:inline-flex;align-items:center;gap:4px;padding:2px 0;text-decoration:underline;text-decoration-color:var(--line2);text-underline-offset:3px}
@@ -374,8 +388,8 @@ details.more[open] summary svg{transform:rotate(180deg)}
   <aside class="panel" id="panel" aria-labelledby="panelTitle">
     <div class="panel-head"><h2 id="panelTitle" data-i18n="panelTitle">Filtry i ustawienia</h2>
       <button type="button" class="iconbtn closebtn" id="closePanel" data-i18n-aria="close" aria-label="Zamknij"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button></div>
-    <div class="grp"><div class="grp-h" data-i18n="gSets">Szybkie zestawy</div><div class="presets" id="presets"></div></div>
-    <div class="grp"><div class="grp-h"><span data-i18n="gPacks">Pakiety</span><small id="packSum"></small></div><div class="packs" id="packs"></div></div>
+    <div class="grp"><div class="grp-h" data-i18n="gSets">Szybkie zestawy</div><div class="presets" id="presets"></div><p class="hint" data-i18n="presetHint">Godziny liczone do celu odliczania.</p></div>
+    <div class="grp"><div class="grp-h"><span data-i18n="gPacks">Pakiety</span><small id="packSum"></small></div><div class="packs" id="packs"></div><p class="hint" id="tierLegend"></p></div>
     <div class="grp"><div class="grp-h" data-i18n="gFocus">Zakres</div><div class="radios" id="focus" role="radiogroup"></div><p class="hint" id="focusHint"></p></div>
     <div class="grp"><div class="grp-h" data-i18n="gTypes">Rodzaje</div><div class="chips" id="types"></div></div>
     <div class="grp"><div class="grp-h" data-i18n="gNotes">Notki przy tytułach</div><div class="seg3" id="notes"></div><p class="hint" id="notesHint"></p>
@@ -434,7 +448,7 @@ const SECTIONS = [
 ["f4b","Faza 4 — po No Way Home","Phase 4 — after No Way Home"],
 ["f5","Faza 5","Phase 5"],
 ["xmen","X-Men i Deadpool — przed Deadpool & Wolverine","X-Men & Deadpool — before Deadpool & Wolverine"],
-["bridges","Pomosty — tuż przed Deadpool & Wolverine","Bridges — right before Deadpool & Wolverine"],
+["bridges","Starsze filmy (1998–2007)","Older films (1998–2007)"],
 ["f5b","Faza 5 — finał","Phase 5 — finale"],
 ["ff15","Fant4stic (2015) — wyspa","Fant4stic (2015) — an island"],
 ["f6","Faza 6 — prosto do Doomsday","Phase 6 — straight into Doomsday"],
@@ -528,7 +542,7 @@ const RAW = [
 ["avg1","Avengers","","","","2012","film","mcu",2.4,20120504,9,3,"pierwsza wielka drużynówka; bitwa o Nowy Jork","the first big team-up; the Battle of New York","","","f1"],
 ["os_item47","Marvel One-Shot: Item 47","","","","2012","short","oneshots",0.2,20120925,9.5,0,"para z chitaurską bronią po bitwie o Nowy Jork","a couple with a Chitauri gun after the Battle of New York","","","f1"],
 ["im3","Iron Man 3","","","","2013","film","mcu",2.2,20130503,10,0,"Tony po bitwie o Nowy Jork; ważne przed Shang-Chi","Tony after the Battle of New York; matters before Shang-Chi","","","f2"],
-["os_king","Marvel One-Shot: All Hail the King","","","","2014","short","oneshots",0.23,20140225,10.5,0,"epilog Iron Mana 3 — oglądaj dopiero po nim; ważne przed Shang-Chi","an Iron Man 3 epilogue — watch it only after the film; matters before Shang-Chi","","","f2"],
+["os_king","Marvel One-Shot: All Hail the King","","","","2014","short","mcuplus",0.23,20140225,10.5,0,"epilog Iron Mana 3 — oglądaj dopiero po nim; ważne przed Shang-Chi","an Iron Man 3 epilogue — watch it only after the film; matters before Shang-Chi","","","f2"],
 ["aos_s1a","Agents of S.H.I.E.L.D. S1 E1–7","Agenci T.A.R.C.Z.Y. S1 E1–7","","","2013","serial","abc",5,20130924,10.6,0,"start serialu po bitwie o Nowy Jork","the show kicks off after the Battle of New York","","","f2"],
 ["tdw","Thor: The Dark World","Thor: Mroczny świat","","","2013","film","mcu",1.9,20131108,11,0,"Thor, Loki i Mroczne Elfy; ważne dla wątku Lokiego","Thor, Loki and the Dark Elves; key for Loki's arc","","","f2"],
 ["aos_s1b","Agents of S.H.I.E.L.D. S1 E8–16","Agenci T.A.R.C.Z.Y. S1 E8–16","","","2013–14","serial","abc",6.5,20131126,11.5,0,"serial rozkręca własne tajemnice","the show builds up its own mysteries","","","f2"],
@@ -553,7 +567,7 @@ const RAW = [
 ["aos_s5","Agents of S.H.I.E.L.D. S5","Agenci T.A.R.C.Z.Y. S5","","","2017–18","serial","abc",15.8,20171201,28.3,0,"serial odrywa się od filmów i leci własnym torem","the show breaks away from the films and goes its own way","","","f3"],
 ["runaways","Runaways","","3 sezony","3 seasons","2017–19","serial","abc",26,20171121,35.5,0,"nastolatki kontra rodzice-złoczyńcy; crossover z Cloak & Dagger","teens versus their supervillain parents; a Cloak & Dagger crossover","","","f3"],
 ["cdag","Cloak & Dagger","","2 sezony","2 seasons","2018–19","serial","abc",15,20180607,35.6,0,"dwójka spleciona mocami; crossover z Runaways","two teens bound by their powers; a Runaways crossover","","","f3"],
-["helstrom","Helstrom","","","","2020","serial","wyspy",8,20201016,40.5,0,"mroczny horror z porzuconej marki Adventure into Fear","a dark horror from the abandoned Adventure into Fear label","","","f3"],
+["helstrom","Helstrom","","","","2020","serial","abc",8,20201016,40.5,0,"mroczny horror z porzuconej marki Adventure into Fear","a dark horror from the abandoned Adventure into Fear label","","","f3"],
 ["thor3","Thor: Ragnarok","","","","2017","film","mcu",2.2,20171103,35,0,"reset Thora w komediowym tonie; Hulk na Sakaarze; oglądaj tuż przed Infinity War","Thor reinvented as a comedy; Hulk on Sakaar; watch right before Infinity War","","","f3"],
 ["bp1","Black Panther","Czarna Pantera","","","2018","film","mcu",2.2,20180216,27,0,"Wakanda i Killmonger; fenomen kulturowy","Wakanda and Killmonger; a cultural phenomenon","","","f3"],
 ["aiw","Avengers: Infinity War","Avengers: Wojna bez granic","","","2018","film","mcu",2.5,20180427,39,3,"pierwsza połowa wielkiego finału Sagi Nieskończoności","part one of the Infinity Saga's grand finale","","","f3"],
@@ -564,24 +578,24 @@ const RAW = [
 ["peterstodo","Marvel One-Shot: Peter's To-Do List","","","","2019","short","oneshots",0.06,20191001,46.9,0,"wycięta scenka z Far From Home wydana jako One-Shot","a deleted Far From Home scene released as a One-Shot","","","f3"],
 ["smffh","Spider-Man: Far From Home","Spider-Man: Daleko od domu","","","2019","film","mcu",2.2,20190702,47,0,"Peter po Endgame; Mysterio; zostań do samego końca napisów","Peter after Endgame; Mysterio; stay until the very end of the credits","","","f3"],
 ["dailybugle","The Daily Bugle","","","","2019–21","short","oneshots",0.5,20190717,47.3,0,"fejkowy serwis informacyjny z uniwersum (YouTube/TikTok); oglądaj między Far From Home a No Way Home","a fake in-universe news show (YouTube/TikTok); watch between Far From Home and No Way Home","","","f3"],
-["ddn1","Daredevil S1","","","","2015","serial","netflix",11.5,20150410,16,0,"minimum przed Born Again: Daredevil 1–3 + Punisher","the minimum before Born Again: Daredevil 1–3 + Punisher","","","netflix"],
+["ddn1","Daredevil S1","","","","2015","serial","dd",11.5,20150410,16,0,"minimum przed Born Again: Daredevil 1–3 + Punisher","the minimum before Born Again: Daredevil 1–3 + Punisher","","","netflix"],
 ["jj1","Jessica Jones S1","","","","2015","serial","netflix",11,20151120,17,0,"Kilgrave Tennanta — jeden z najlepszych złoczyńców Marvela","Tennant's Kilgrave — one of Marvel's best villains","","","netflix"],
-["ddn2","Daredevil S2","","","","2016","serial","netflix",11.5,20160318,20,0,"debiut Punishera Bernthala i Elektry","the debut of Bernthal's Punisher and Elektra","","","netflix"],
+["ddn2","Daredevil S2","","","","2016","serial","dd",11.5,20160318,20,0,"debiut Punishera Bernthala i Elektry","the debut of Bernthal's Punisher and Elektra","","","netflix"],
 ["lc1","Luke Cage S1","","","","2016","serial","netflix",11.5,20160930,21,0,"kuloodporny bohater Harlemu","Harlem's bulletproof hero","","","netflix"],
 ["if1","Iron Fist S1","","","","2017","serial","netflix",11,20170317,22,0,"najsłabiej oceniany z paczki","the weakest-rated of the bunch","","","netflix"],
-["def","The Defenders","","","","2017","serial","netflix",6.5,20170818,23,0,"crossover całej czwórki obrońców","the four Defenders' crossover","","","netflix"],
-["pun1","The Punisher S1","","","","2017","serial","netflix",11,20171117,29,0,"solowy Frank; wojenna trauma i zemsta","solo Frank; war trauma and revenge","","","netflix"],
+["def","The Defenders","","","","2017","serial","dd",6.5,20170818,23,0,"crossover całej czwórki obrońców","the four Defenders' crossover","","","netflix"],
+["pun1","The Punisher S1","","","","2017","serial","dd",11,20171117,29,0,"solowy Frank; wojenna trauma i zemsta","solo Frank; war trauma and revenge","","","netflix"],
 ["jj2","Jessica Jones S2","","","","2018","serial","netflix",12,20180308,31,0,"Jessica kontra własna przeszłość","Jessica versus her own past","","","netflix"],
 ["lc2","Luke Cage S2","","","","2018","serial","netflix",12,20180622,32,0,"Bushmaster i walka o Harlem","Bushmaster and the fight for Harlem","","","netflix"],
 ["if2","Iron Fist S2","","","","2018","serial","netflix",8.5,20180907,33,0,"krótszy i sprawniejszy sezon Danny'ego","Danny's shorter, tighter season","","","netflix"],
-["ddn3","Daredevil S3","","","","2018","serial","netflix",12,20181019,34,0,"powrót Fiska; dla wielu najlepszy sezon ery Netflixa","Fisk is back; for many the best season of the Netflix era","","","netflix"],
-["pun2","The Punisher S2","","","","2019","serial","netflix",11,20190118,36,0,"ostatnia solowa runda Franka przed przerwą","Frank's last solo round before the hiatus","","","netflix"],
+["ddn3","Daredevil S3","","","","2018","serial","dd",12,20181019,34,0,"powrót Fiska; dla wielu najlepszy sezon ery Netflixa","Fisk is back; for many the best season of the Netflix era","","","netflix"],
+["pun2","The Punisher S2","","","","2019","serial","dd",11,20190118,36,0,"ostatnia solowa runda Franka przed przerwą","Frank's last solo round before the hiatus","","","netflix"],
 ["jj3","Jessica Jones S3","","","","2019","serial","netflix",11.5,20190614,37,0,"finał całej ery Netflixa","the finale of the entire Netflix era","","","netflix"],
 ["wv","WandaVision","","","","2021","serial","mcu",5.8,20210115,42,1,"początek trylogii: WandaVision → Agatha → VisionQuest","start of the trilogy: WandaVision → Agatha → VisionQuest","","","f4"],
 ["faws","The Falcon and the Winter Soldier","Falcon i Zimowy Żołnierz","","","2021","serial","mcu",5.3,20210319,46,1,"Sam i Bucky po Endgame","Sam and Bucky after Endgame","","","f4"],
 ["loki1","Loki S1","","","","2021","serial","mcu",4.8,20210609,43,3,"Loki i TVA; fundament Sagi Multiwersum","Loki and the TVA; the foundation of the Multiverse Saga","","","f4"],
 ["bw","Black Widow","Czarna Wdowa","","","2021","film","mcu",2.2,20210709,26,0,"Yelena i Red Guardian; ważne przed Thunderbolts*","Yelena and Red Guardian; matters before Thunderbolts*","","","f4"],
-["wi1","What If…? S1","","","","2021","anim","mcu",4.5,20210811,52,0,"animowane warianty znanych historii; debiut Watchera","animated what-ifs of familiar stories; the Watcher debuts","","","f4"],
+["wi1","What If…? S1","","","","2021","anim","mcuside",4.5,20210811,52,0,"animowane warianty znanych historii; debiut Watchera","animated what-ifs of familiar stories; the Watcher debuts","","","f4"],
 ["modok","M.O.D.O.K.","","","","2021","anim","wyspy",4,20210521,40.6,0,"animowana komedia Hulu; poza kanonem","Hulu animated comedy; non-canon","","","f4"],
 ["hitmonkey","Hit-Monkey","","2 sezony","2 seasons","2021–24","anim","wyspy",8,20211117,40.7,0,"animacja Hulu o małpie-zabójcy","Hulu animation about an assassin monkey","","","f4"],
 ["shangchi","Shang-Chi and the Legend of the Ten Rings","Shang-Chi i legenda dziesięciu pierścieni","","","2021","film","mcu",2.2,20210903,45,3,"Dziesięć Pierścieni; łączy się z Iron Manem 3","the Ten Rings; ties back to Iron Man 3","","","f4"],
@@ -595,81 +609,81 @@ const RAW = [
 ["venom","Venom","","","","2018","film","ssu",1.9,20181005,48.6,0,"narodziny duetu Eddie–symbiont","the birth of the Eddie–symbiote duo","","","spider"],
 ["venom2","Venom: Let There Be Carnage","Venom 2: Carnage","","","2021","film","ssu",1.6,20211001,48.7,0,"Carnage Woody'ego Harrelsona; zostań na scenę po napisach","Woody Harrelson's Carnage; stay for the post-credits scene","","","spider"],
 ["smnwh","Spider-Man: No Way Home","Spider-Man: Bez drogi do domu","","","2021","film","mcu",2.5,20211217,49,3,"dzieje się zaraz po Far From Home; najlepiej po filmach Sony z tej sekcji","picks up right after Far From Home; best after the Sony films in this section","","","spider"],
-["itsv","Spider-Man: Into the Spider-Verse","Spider-Man Uniwersum","","","2018","anim","sony",2,20181214,48.8,0,"animowane arcydzieło; osobne uniwersum","an animated masterpiece; a separate universe","","","spiderverse"],
-["spiderwithin","The Spider Within: A Spider-Verse Story","","","","2024","short","sony",0.12,20240327,48.91,0,"oficjalny krótki metraż o zdrowiu psychicznym Milesa","an official short about Miles' mental health","","","spiderverse"],
-["atsv","Spider-Man: Across the Spider-Verse","Spider-Man: Poprzez multiwersum","","","2023","anim","sony",2.3,20230602,48.9,0,"część pierwsza dwuczęściowej historii — dokończenie w Beyond the Spider-Verse (2027)","part one of a two-part story — it concludes in Beyond the Spider-Verse (2027)","","","spiderverse"],
-["spidernoir","Spider-Noir","","","","2026","serial","wyspy",6,20260525,48.97,0,"aktorski serial Sony na Prime Video; Nicolas Cage w roli tytułowej, lata 30.; skasowany po 1 sezonie","Sony's live-action series on Prime Video; Nicolas Cage in the title role, the 1930s; cancelled after one season","","","spiderverse"],
-["mk","Moon Knight","","","","2022","serial","mcu",5,20220330,53,0,"podwójny Oscar Isaac; egipscy bogowie; samodzielna historia","Oscar Isaac times two; Egyptian gods; a standalone story","","","f4b"],
+["itsv","Spider-Man: Into the Spider-Verse","Spider-Man Uniwersum","","","2018","anim","sverse",2,20181214,48.8,0,"animowane arcydzieło; osobne uniwersum","an animated masterpiece; a separate universe","","","spiderverse"],
+["spiderwithin","The Spider Within: A Spider-Verse Story","","","","2024","short","sverse",0.12,20240327,48.91,0,"oficjalny krótki metraż o zdrowiu psychicznym Milesa","an official short about Miles' mental health","","","spiderverse"],
+["atsv","Spider-Man: Across the Spider-Verse","Spider-Man: Poprzez multiwersum","","","2023","anim","sverse",2.3,20230602,48.9,0,"część pierwsza dwuczęściowej historii — dokończenie w Beyond the Spider-Verse (2027)","part one of a two-part story — it concludes in Beyond the Spider-Verse (2027)","","","spiderverse"],
+["spidernoir","Spider-Noir","","","","2026","serial","sverse",6,20260525,48.97,0,"aktorski serial Sony na Prime Video; Nicolas Cage w roli tytułowej, lata 30.; skasowany po 1 sezonie","Sony's live-action series on Prime Video; Nicolas Cage in the title role, the 1930s; cancelled after one season","","","spiderverse"],
+["mk","Moon Knight","","","","2022","serial","mcuside",5,20220330,53,0,"podwójny Oscar Isaac; egipscy bogowie; samodzielna historia","Oscar Isaac times two; Egyptian gods; a standalone story","","","f4b"],
 ["dsmom","Doctor Strange in the Multiverse of Madness","Doktor Strange w multiwersum obłędu","","","2022","film","mcu",2.1,20220506,50,3,"Strange w multiwersum; oglądaj po WandaVision","Strange in the multiverse; watch after WandaVision","","","f4b"],
 ["msm","Ms. Marvel","","","","2022","serial","mcu",5,20220608,57,0,"debiut Kamali Khan; prowadzi prosto do The Marvels","Kamala Khan's debut; leads straight into The Marvels","","","f4b"],
 ["thor4","Thor: Love and Thunder","Thor: Miłość i grom","","","2022","film","mcu",2,20220708,58,0,"Gorr Christiana Bale'a; Thor po Endgame","Christian Bale's Gorr; Thor after Endgame","","","f4b"],
-["groot","I Am Groot","Ja jestem Groot","2 sezony shortów","2 seasons of shorts","2022–23","anim","mcu",0.7,20220810,14,0,"krótkie, urocze przerywniki bez fabuły","short, adorable palate cleansers, no plot","","","f4b"],
-["shehulk","She-Hulk: Attorney at Law","Mecenas She-Hulk","","","2022","serial","mcu",4.5,20220818,56,0,"komedia prawnicza łamiąca czwartą ścianę; warto przed Born Again","a fourth-wall-breaking legal comedy; worth it before Born Again","","","f4b"],
-["wbn","Werewolf by Night","Wilkołak nocą","","","2022","special","mcu",0.9,20221007,59,0,"czarno-biały horror na Halloween; samodzielna historia","a black-and-white Halloween horror; a standalone story","","","f4b"],
+["groot","I Am Groot","Ja jestem Groot","2 sezony shortów","2 seasons of shorts","2022–23","anim","mcuside",0.7,20220810,14,0,"krótkie, urocze przerywniki bez fabuły","short, adorable palate cleansers, no plot","","","f4b"],
+["shehulk","She-Hulk: Attorney at Law","Mecenas She-Hulk","","","2022","serial","mcuplus",4.5,20220818,56,0,"komedia prawnicza łamiąca czwartą ścianę; warto przed Born Again","a fourth-wall-breaking legal comedy; worth it before Born Again","","","f4b"],
+["wbn","Werewolf by Night","Wilkołak nocą","","","2022","special","mcuside",0.9,20221007,59,0,"czarno-biały horror na Halloween; samodzielna historia","a black-and-white Halloween horror; a standalone story","","","f4b"],
 ["morbius","Morbius","","","","2022","film","ssu",1.7,20220401,48.65,0,"tylko dla kompletystów","completionists only","","","f4b"],
 ["bpwf","Black Panther: Wakanda Forever","Czarna Pantera: Wakanda w moim sercu","","","2022","film","mcu",2.7,20221111,54,3,"Wakanda i podwodne Talokan; debiut Namora i Riri Williams","Wakanda and undersea Talokan; Namor's and Riri Williams' debuts","","","f4b"],
-["gotghs","The Guardians of the Galaxy Holiday Special","","","","2022","special","mcu",0.8,20221125,61,0,"świąteczny drobiazg z Kevinem Baconem","a Christmas trifle with Kevin Bacon","","","f4b"],
+["gotghs","The Guardians of the Galaxy Holiday Special","","","","2022","special","mcuplus",0.8,20221125,61,0,"świąteczny drobiazg z Kevinem Baconem","a Christmas trifle with Kevin Bacon","","","f4b"],
 ["amwq","Ant-Man and the Wasp: Quantumania","Ant-Man i Osa: Kwantomania","","","2023","film","mcu",2.1,20230217,63,0,"głębiny świata kwantowego; Kang na pełnym ekranie","deep into the Quantum Realm; Kang front and center","","","f5"],
 ["gotg3","Guardians of the Galaxy Vol. 3","Strażnicy Galaktyki: Volume 3","","","2023","film","mcu",2.5,20230505,64,0,"domknięcie trylogii Strażników; historia Rocketa","the Guardians trilogy's close; Rocket's story","","","f5"],
-["si","Secret Invasion","Tajna inwazja","","","2023","serial","mcu",5,20230621,65,0,"Skrulle wśród nas; szpiegowski thriller z Furym","Skrulls among us; a spy thriller with Fury","","","f5"],
+["si","Secret Invasion","Tajna inwazja","","","2023","serial","mcuplus",5,20230621,65,0,"Skrulle wśród nas; szpiegowski thriller z Furym","Skrulls among us; a spy thriller with Fury","","","f5"],
 ["loki2","Loki S2","","","","2023","serial","mcu",5,20231005,67,3,"drugi i ostatni sezon; kluczowy przed Doomsday","the second and final season; key before Doomsday","","","f5"],
 ["marvels","The Marvels","Marvels","","","2023","film","mcu",1.8,20231110,66,1,"Carol, Monica i Kamala razem; koniecznie zostań na scenę po napisach","Carol, Monica and Kamala together; be sure to stay for the post-credits scene","","","f5"],
-["wi2","What If…? S2","","","","2023","anim","mcu",4.5,20231222,68,0,"kolejna porcja wariantów; jest i odcinek świąteczny","another round of variants; incl. a holiday episode","","","f5"],
-["echo","Echo","","","","2024","serial","mcu",4,20240109,55,0,"Maya po wydarzeniach z Hawkeye; korzenie Choctaw","Maya after the events of Hawkeye; Choctaw roots","","","f5"],
+["wi2","What If…? S2","","","","2023","anim","mcuside",4.5,20231222,68,0,"kolejna porcja wariantów; jest i odcinek świąteczny","another round of variants; incl. a holiday episode","","","f5"],
+["echo","Echo","","","","2024","serial","mcuplus",4,20240109,55,0,"Maya po wydarzeniach z Hawkeye; korzenie Choctaw","Maya after the events of Hawkeye; Choctaw roots","","","f5"],
 ["xm1","X-Men","","","","2000","film","fox",1.7,20000714,43.05,3,"pierwszy film o X-Menach — tu zaczęła się era Foxa","the first X-Men film — where the Fox era began","","","xmen"],
 ["x2","X2","X-Men 2","","","2003","film","fox",2.2,20030502,43.1,3,"dla wielu najlepszy film o X-Menach ery Foxa","for many the best X-Men film of the Fox era","","","xmen"],
 ["x3","X-Men: The Last Stand","X-Men: Ostatni bastion","","","2006","film","fox",1.7,20060526,43.15,0,"zamyka pierwszą trylogię X-Men","closes the original X-Men trilogy","","","xmen"],
-["xow","X-Men Origins: Wolverine","X-Men Geneza: Wolverine","","","2009","film","fox",1.8,20090501,43.2,0,"origin Logana; pierwszy (niesławny) Deadpool","Logan's origin; the first (infamous) Deadpool","","","xmen"],
+["xow","X-Men Origins: Wolverine","X-Men Geneza: Wolverine","","","2009","film","foxrest",1.8,20090501,43.2,0,"origin Logana; pierwszy (niesławny) Deadpool","Logan's origin; the first (infamous) Deadpool","","","xmen"],
 ["xfc","X-Men: First Class","X-Men: Pierwsza klasa","","","2011","film","fox",2.2,20110603,43.25,0,"lata 60.; młodzi Charles i Erik","the 1960s; young Charles and Erik","","","xmen"],
-["wolv","The Wolverine","Wolverine","","","2013","film","fox",2.1,20130726,43.3,0,"Logan w Japonii","Logan in Japan","","","xmen"],
+["wolv","The Wolverine","Wolverine","","","2013","film","foxrest",2.1,20130726,43.3,0,"Logan w Japonii","Logan in Japan","","","xmen"],
 ["dofp","X-Men: Days of Future Past","X-Men: Przeszłość, która nadejdzie","","","2014","film","fox",2.2,20140523,43.35,1,"łączy stary i młody skład X-Menów; podróż w czasie do lat 70.","unites the original and younger X-Men casts; time travel to the 1970s","","","xmen"],
 ["dp1","Deadpool","","","","2016","film","fox",1.8,20160212,43.4,1,"obowiązkowe przed Deadpool & Wolverine","mandatory before Deadpool & Wolverine","","","xmen"],
-["xapo","X-Men: Apocalypse","","","","2016","film","fox",2.4,20160527,43.45,0,"lata 80. i Apocalypse","the 1980s and Apocalypse","","","xmen"],
-["nogooddeed","Deadpool: No Good Deed","","","","2017","short","fox",0.06,20170303,43.47,0,"krótkometrażówka wyświetlana w kinach przed Loganem","the short that played in theaters before Logan","","","xmen"],
+["xapo","X-Men: Apocalypse","","","","2016","film","foxrest",2.4,20160527,43.45,0,"lata 80. i Apocalypse","the 1980s and Apocalypse","","","xmen"],
+["nogooddeed","Deadpool: No Good Deed","","","","2017","short","foxrest",0.06,20170303,43.47,0,"krótkometrażówka wyświetlana w kinach przed Loganem","the short that played in theaters before Logan","","","xmen"],
 ["logan","Logan","Logan: Wolverine","","","2017","film","fox",2.3,20170303,43.5,1,"Jackman i Stewart w najlepszej formie; jedno z najlepszych","Jackman and Stewart at their best; one of the very best","","","xmen"],
 ["dp2","Deadpool 2","","","","2018","film","fox",2,20180518,43.55,1,"obowiązkowe przed Deadpool & Wolverine","mandatory before Deadpool & Wolverine","","","xmen"],
-["dphx","Dark Phoenix","X-Men: Mroczna Phoenix","","","2019","film","fox",1.9,20190607,43.6,0,"ostatni kinowy film ery Foxa o X-Menach","the Fox era's last theatrical X-Men film","","","xmen"],
-["nm","The New Mutants","Nowi mutanci","","","2020","film","fox",1.6,20200828,43.65,0,"horror o młodych mutantach, ofiara przejęcia Foxa","a young-mutant horror, a casualty of the Fox buyout","","","xmen"],
+["dphx","Dark Phoenix","X-Men: Mroczna Phoenix","","","2019","film","foxrest",1.9,20190607,43.6,0,"ostatni kinowy film ery Foxa o X-Menach","the Fox era's last theatrical X-Men film","","","xmen"],
+["nm","The New Mutants","Nowi mutanci","","","2020","film","foxrest",1.6,20200828,43.65,0,"horror o młodych mutantach, ofiara przejęcia Foxa","a young-mutant horror, a casualty of the Fox buyout","","","xmen"],
 ["legion","Legion","","3 sezony","3 seasons","2017–19","serial","wyspy",22,20170208,43.42,0,"FX; luźno w świecie X-Men, totalnie osobne i wybitne","FX; loosely in the X-Men world, fully standalone and brilliant","","","xmen"],
 ["gifted","The Gifted","","2 sezony","2 seasons","2017–19","serial","wyspy",21,20171002,43.44,0,"Fox; rodzina mutantów w ukryciu — nic tego nie kontynuuje, samodzielne","Fox; a mutant family in hiding — nothing continues it, fully standalone","","","xmen"],
-["xtas","X-Men: The Animated Series","","5 sezonów","5 seasons","1992–97","anim","fox",28,19921031,43.68,0,"kultowa kreskówka lat 90.; X-Men '97 to jej bezpośrednia kontynuacja","the cult '90s cartoon; X-Men '97 is its direct continuation","","","xmen"],
-["x97a","X-Men '97 S1","","","","2024","anim","mcu",5,20240320,43.7,0,"kontynuacja kultowej kreskówki z lat 90.; poza główną osią czasu MCU","continuation of the cult '90s cartoon; outside the main MCU timeline","","","xmen"],
-["blade","Blade","Blade: Wieczny łowca","","","1998","film","dwcameo",2,19980821,43.76,0,"Wesley Snipes jako Blade; mroczny prekursor dzisiejszego kina superbohaterskiego","Wesley Snipes as Blade; a dark forerunner of today's superhero films","","","bridges"],
-["blade2","Blade II","Blade: Wieczny łowca II","","","2002","film","dwcameo",2,20020322,43.77,0,"reż. Guillermo del Toro; najlepsza część trylogii","directed by Guillermo del Toro; the trilogy's best","","","bridges"],
-["blade3","Blade: Trinity","Blade: Mroczna trójca","","","2004","film","dwcameo",1.9,20041208,43.78,0,"słabszy finał; u boku Snipesa młody Ryan Reynolds","a weaker finale; young Ryan Reynolds alongside Snipes","","","bridges"],
-["bladeseries","Blade: The Series","","","","2006","serial","dwcameo",9,20060628,43.785,0,"kontynuacja filmowej trylogii; Sticky Fingaz jako Blade","a continuation of the film trilogy; Sticky Fingaz as Blade","","","bridges"],
-["dd03","Daredevil","","","","2003","film","dwcameo",1.7,20030214,43.79,0,"wersja z Benem Affleckiem; stąd wywodzi się Elektra","the Ben Affleck version; Elektra spins off from here","","","bridges"],
-["elektra","Elektra","","","","2005","film","dwcameo",1.6,20050114,43.795,0,"spin-off Daredevila (2003) z Jennifer Garner","a Daredevil (2003) spin-off starring Jennifer Garner","","","bridges"],
-["ff05","Fantastic Four","Fantastyczna Czwórka","","","2005","film","dwcameo",1.8,20050708,43.8,0,"Fantastyczna Czwórka ery Foxa — pierwszy z dwóch filmów","the Fox-era Fantastic Four — the first of two films","","","bridges"],
-["ff07","Fantastic Four: Rise of the Silver Surfer","Fantastyczna Czwórka i Srebrny Surfer","","","2007","film","dwcameo",1.5,20070615,43.81,0,"Silver Surfer i Galactus — porównaj z First Steps","Silver Surfer and Galactus — compare with First Steps","","","bridges"],
+["xtas","X-Men: The Animated Series","","5 sezonów","5 seasons","1992–97","anim","foxrest",28,19921031,43.68,0,"kultowa kreskówka lat 90.; X-Men '97 to jej bezpośrednia kontynuacja","the cult '90s cartoon; X-Men '97 is its direct continuation","","","xmen"],
+["x97a","X-Men '97 S1","","","","2024","anim","foxrest",5,20240320,43.7,0,"kontynuacja kultowej kreskówki z lat 90.; poza główną osią czasu MCU","continuation of the cult '90s cartoon; outside the main MCU timeline","","","xmen"],
+["blade","Blade","Blade: Wieczny łowca","","","1998","film","antyki",2,19980821,43.76,0,"Wesley Snipes jako Blade; mroczny prekursor dzisiejszego kina superbohaterskiego","Wesley Snipes as Blade; a dark forerunner of today's superhero films","","","bridges"],
+["blade2","Blade II","Blade: Wieczny łowca II","","","2002","film","antyki",2,20020322,43.77,0,"reż. Guillermo del Toro; najlepsza część trylogii","directed by Guillermo del Toro; the trilogy's best","","","bridges"],
+["blade3","Blade: Trinity","Blade: Mroczna trójca","","","2004","film","antyki",1.9,20041208,43.78,0,"słabszy finał; u boku Snipesa młody Ryan Reynolds","a weaker finale; young Ryan Reynolds alongside Snipes","","","bridges"],
+["bladeseries","Blade: The Series","","","","2006","serial","antyki",9,20060628,43.785,0,"kontynuacja filmowej trylogii; Sticky Fingaz jako Blade","a continuation of the film trilogy; Sticky Fingaz as Blade","","","bridges"],
+["dd03","Daredevil","","","","2003","film","antyki",1.7,20030214,43.79,0,"wersja z Benem Affleckiem; stąd wywodzi się Elektra","the Ben Affleck version; Elektra spins off from here","","","bridges"],
+["elektra","Elektra","","","","2005","film","antyki",1.6,20050114,43.795,0,"spin-off Daredevila (2003) z Jennifer Garner","a Daredevil (2003) spin-off starring Jennifer Garner","","","bridges"],
+["ff05","Fantastic Four","Fantastyczna Czwórka","","","2005","film","antyki",1.8,20050708,43.8,0,"Fantastyczna Czwórka ery Foxa — pierwszy z dwóch filmów","the Fox-era Fantastic Four — the first of two films","","","bridges"],
+["ff07","Fantastic Four: Rise of the Silver Surfer","Fantastyczna Czwórka i Srebrny Surfer","","","2007","film","antyki",1.5,20070615,43.81,0,"Silver Surfer i Galactus — porównaj z First Steps","Silver Surfer and Galactus — compare with First Steps","","","bridges"],
 ["dw","Deadpool & Wolverine","","","","2024","film","mcu",2.1,20240726,44,3,"pożegnanie ery Foxa i mostek do MCU","a farewell to the Fox era and a bridge into the MCU","","","f5b"],
 ["mweb","Madame Web","","","","2024","film","ssu",1.9,20240214,48.92,0,"tylko dla kompletystów","completionists only","","","f5b"],
 ["venom3","Venom: The Last Dance","Venom 3: Ostatni taniec","","","2024","film","ssu",1.8,20241025,48.94,0,"finał trylogii Venoma","the Venom trilogy's finale","","","f5b"],
 ["kraven","Kraven the Hunter","Kraven Łowca","","","2024","film","ssu",2.1,20241213,48.96,0,"zamyka uniwersum Sony (SSU)","closes out Sony's SSU universe","","","f5b"],
 ["agatha","Agatha All Along","","","","2024","serial","mcu",5.5,20240918,69,0,"środek trylogii Wandy i Visiona","the middle of the Wanda/Vision trilogy","","","f5b"],
-["wi3","What If…? S3","","","","2024","anim","mcu",4,20241222,70,0,"finał animowanej antologii","the animated anthology's finale","","","f5b"],
-["yfnsm1","Your Friendly Neighborhood Spider-Man S1","","","","2025","anim","mcu",4.3,20250129,25,0,"alternatywny, animowany Peter Parker","an alternate, animated Peter Parker","","","f5b"],
+["wi3","What If…? S3","","","","2024","anim","mcuside",4,20241222,70,0,"finał animowanej antologii","the animated anthology's finale","","","f5b"],
+["yfnsm1","Your Friendly Neighborhood Spider-Man S1","","","","2025","anim","mcuside",4.3,20250129,25,0,"alternatywny, animowany Peter Parker","an alternate, animated Peter Parker","","","f5b"],
 ["cabnw","Captain America: Brave New World","Kapitan Ameryka: Nowy wspaniały świat","","","2025","film","mcu",2,20250214,72,3,"Harrison Ford jako Thaddeus Ross; ważne przed Doomsday","Harrison Ford as Thaddeus Ross; important before Doomsday","","","f5b"],
 ["ddba1","Daredevil: Born Again S1","Daredevil: Odrodzenie S1","","","2025","serial","mcu",7,20250304,71,0,"bezpośrednia kontynuacja Daredevila z Netflixa","a direct continuation of Netflix's Daredevil","","","f5b"],
 ["tbolts","Thunderbolts*","","","","2025","film","mcu",2.1,20250502,73,3,"drużyna antybohaterów; ważne przed Doomsday","a team of antiheroes; important before Doomsday","","","f5b"],
-["ironheart","Ironheart","","","","2025","serial","mcu",5,20250624,60,0,"Riri po Wakanda Forever; magia kontra technologia","Riri after Wakanda Forever; magic versus technology","","","f5b"],
-["ff15","Fantastic Four","Fantastyczna Czwórka","Fant4stic","Fant4stic","2015","film","wyspy",1.7,20150807,2.9,0,"najgorzej oceniana Czwórka — wchodzisz na własne ryzyko","the worst-rated Four — enter at your own risk","","","ff15"],
+["ironheart","Ironheart","","","","2025","serial","mcuplus",5,20250624,60,0,"Riri po Wakanda Forever; magia kontra technologia","Riri after Wakanda Forever; magic versus technology","","","f5b"],
+["ff15","Fantastic Four","Fantastyczna Czwórka","Fant4stic","Fant4stic","2015","film","antyki",1.7,20150807,2.9,0,"najgorzej oceniana Czwórka — wchodzisz na własne ryzyko","the worst-rated Four — enter at your own risk","","","ff15"],
 ["fffs","The Fantastic Four: First Steps","Fantastyczna 4: Pierwsze kroki","","","2025","film","mcu",1.9,20250725,3,3,"retrofuturystyczna Ziemia-828; kluczowe przed Doomsday","a retro-futuristic Earth-828; key before Doomsday","","","f6"],
-["eow","Eyes of Wakanda","Oczy Wakandy","","","2025","anim","mcu",2,20250801,1,0,"antologia: artefakty z wibranium przez wieki","an anthology: vibranium artifacts across the ages","","","f6"],
-["zombies","Marvel Zombies","","","","2025","anim","mcu",2,20250924,41,0,"krwawa, dorosła alternatywa","a bloody, grown-up alternate take","","","f6"],
-["wonderman","Wonder Man","","","","2026","serial","mcu",4.5,20260127,62,0,"satyra na Hollywood; Simon Williams","a Hollywood satire; Simon Williams","","","f6"],
+["eow","Eyes of Wakanda","Oczy Wakandy","","","2025","anim","mcuside",2,20250801,1,0,"antologia: artefakty z wibranium przez wieki","an anthology: vibranium artifacts across the ages","","","f6"],
+["zombies","Marvel Zombies","","","","2025","anim","mcuside",2,20250924,41,0,"krwawa, dorosła alternatywa","a bloody, grown-up alternate take","","","f6"],
+["wonderman","Wonder Man","","","","2026","serial","mcuside",4.5,20260127,62,0,"satyra na Hollywood; Simon Williams","a Hollywood satire; Simon Williams","","","f6"],
 ["ddba2","Daredevil: Born Again S2","Daredevil: Odrodzenie S2","","","2026","serial","mcu",6.5,20260324,74,0,"kontynuacja 1. sezonu; 8 odcinków","continues season 1; 8 episodes","","","f6"],
 ["polk","The Punisher: One Last Kill","","","","2026","special","mcu",1,20260512,75,0,"godzinny specjal o Franku Castle'u — oglądaj po 2. sezonie Born Again","an hour-long Frank Castle special — watch it after Born Again season 2","","","f6"],
-["x97b","X-Men '97 S2","","","","2026","anim","mcu",4.5,20260701,43.75,0,"drugi sezon, 9 odcinków; bezpośrednia kontynuacja pierwszego","season two, 9 episodes; a direct continuation of the first","","","f6"],
+["x97b","X-Men '97 S2","","","","2026","anim","foxrest",4.5,20260701,43.75,0,"drugi sezon, 9 odcinków; bezpośrednia kontynuacja pierwszego","season two, 9 episodes; a direct continuation of the first","","","f6"],
 ["smbnd","Spider-Man: Brand New Day","Spider-Man: Całkiem nowy dzień","","","2026","film","mcu",2.4,20260731,76,1,"38. film MCU, w kinach od 31.07.2026; to film Sony, więc nie ma go na Disney+ — szukaj w VOD","the 38th MCU film, in theaters since Jul 31, 2026; it's a Sony release, so it's not on Disney+ — look for it on digital rental","","","f6"],
 ["vq","VisionQuest","","","","2026","serial","mcu",6.5,20261013,77,1,"finał trylogii WandaVision → Agatha → VisionQuest; 8 odcinków, cały sezon już dostępny","the finale of the WandaVision → Agatha → VisionQuest trilogy; 8 episodes, the full season is out","","","f6"],
 ["encore","Avengers Endgame: Encore","Avengers: Koniec gry — Encore","wersja rozszerzona","extended version","2026","film","mcu",3.1,20260925,40.05,3,"rozszerzony Koniec gry z ok. 4 min nowych scen powiązanych z Doomsday; na Disney+ od 13.11.2026 — jeśli znasz oryginał, liczą się głównie nowe sceny","an extended Endgame with ~4 min of new scenes tied to Doomsday; on Disney+ since Nov 13, 2026 — if you know the original, it's mainly the new scenes that matter","","","f6"],
 ["doom","Avengers: Doomsday","","","","2026","film","mcu",2.5,20261218,79,1,"piąty film Avengers; reż. bracia Russo; ok. 2 h 29 min","the fifth Avengers film; directed by the Russo brothers; about 2 h 29 min","Kino","Theaters","f6"],
-["yfnsm2","Your Friendly Neighborhood Spider-Man S2","","","","2027","anim","mcu",5,20270113,25.5,0,"ciąg dalszy alternatywnego, animowanego Petera","more of the alternate animated Peter","Disney+","Disney+","after"],
+["yfnsm2","Your Friendly Neighborhood Spider-Man S2","","","","2027","anim","mcuside",5,20270113,25.5,0,"ciąg dalszy alternatywnego, animowanego Petera","more of the alternate animated Peter","Disney+","Disney+","after"],
 ["ddba3","Daredevil: Born Again S3","Daredevil: Odrodzenie S3","","","2027","serial","mcu",6.5,20270300,79.3,0,"ostatni sezon Born Again; dokładna data jeszcze nieznana","Born Again's final season; exact date not announced yet","Disney+","Disney+","after"],
-["btsv","Spider-Man: Beyond the Spider-Verse","","","","2027","anim","sony",2.3,20270618,48.915,0,"finał animowanej trylogii Spider-Verse","the finale of the animated Spider-Verse trilogy","Kino","Theaters","after"],
-["x97c","X-Men '97 S3","","","","2027","anim","mcu",4.5,20270000,43.752,0,"trzeci sezon; dokładna data jeszcze nieznana","season three; exact date not announced yet","Disney+","Disney+","after"],
-["zombsw","Marvel Zombies: The Winter Soldier","","","","2027","special","mcu",1,20271000,41.05,0,"pierwszy z corocznych animowanych specjali Marvel Zombies (kolejne w 2028 i 2029); premiera na Halloween 2027","the first of the yearly animated Marvel Zombies specials (more in 2028 and 2029); arriving for Halloween 2027","Disney+","Disney+","after"],
+["btsv","Spider-Man: Beyond the Spider-Verse","","","","2027","anim","sverse",2.3,20270618,48.915,0,"finał animowanej trylogii Spider-Verse","the finale of the animated Spider-Verse trilogy","Kino","Theaters","after"],
+["x97c","X-Men '97 S3","","","","2027","anim","foxrest",4.5,20270000,43.752,0,"trzeci sezon; dokładna data jeszcze nieznana","season three; exact date not announced yet","Disney+","Disney+","after"],
+["zombsw","Marvel Zombies: The Winter Soldier","","","","2027","special","mcuside",1,20271000,41.05,0,"pierwszy z corocznych animowanych specjali Marvel Zombies (kolejne w 2028 i 2029); premiera na Halloween 2027","the first of the yearly animated Marvel Zombies specials (more in 2028 and 2029); arriving for Halloween 2027","Disney+","Disney+","after"],
 ["sw","Avengers: Secret Wars","","","","2027","film","mcu",3,20271217,80,0,"finał Sagi Multiwersum","the finale of the Multiverse Saga","Kino","Theaters","after"],
 ["assemblinguniv","Marvel Studios: Assembling a Universe","","","","2014","dok","docs",0.7,20140318,78.02,0,"pierwszy dokument o kulisach MCU (ABC)","the first behind-the-scenes MCU documentary (ABC)","","","docs"],
 ["marvel75","Marvel 75 Years: From Pulp to Pop!","","","","2014","dok","docs",0.7,20141104,78.03,0,"75 lat historii Marvela w pigułce (ABC)","75 years of Marvel history in a nutshell (ABC)","","","docs"],
@@ -683,25 +697,60 @@ const RAW = [
 ];
 
 /* ================= KONFIGURACJA ================= */
-const PACKS = {
-  mcu:     {pl:"MCU — podstawa",        en:"MCU — the core",         sh:"MCU", shEn:"MCU", on:1, dpl:"filmy i seriale Marvel Studios", den:"Marvel Studios films and series"},
-  netflix: {pl:"Netflix: Defenders",    en:"Netflix: Defenders",     sh:"Netflix", shEn:"Netflix", on:1, dpl:"Daredevil, Jessica Jones, Luke Cage, Iron Fist, Punisher", den:"Daredevil, Jessica Jones, Luke Cage, Iron Fist, Punisher"},
-  fox:     {pl:"X-Men + Deadpool (Fox)",en:"X-Men + Deadpool (Fox)", sh:"Fox", shEn:"Fox", on:1, dpl:"era Foxa i animowani X-Meni", den:"the Fox era and the animated X-Men"},
-  sony:    {pl:"Spider-Man (Sony)",     en:"Spider-Man (Sony)",      sh:"Sony", shEn:"Sony", on:1, dpl:"Raimi, Webb i animowane Spider-Verse", den:"Raimi, Webb and the animated Spider-Verse"},
-  ssu:     {pl:"Venom i spółka (SSU)",  en:"Venom & co. (SSU)",      sh:"SSU", shEn:"SSU", on:1, dpl:"Venom, Morbius, Madame Web, Kraven", den:"Venom, Morbius, Madame Web, Kraven"},
-  dwcameo: {pl:"Pomosty do D&W",        en:"Bridges to D&W",         sh:"pomost do D&W", shEn:"D&W bridge", on:1, dpl:"filmy sprzed MCU warte poznania przed Deadpool & Wolverine", den:"pre-MCU films worth knowing before Deadpool & Wolverine"},
-  abc:     {pl:"ABC / Hulu",            en:"ABC / Hulu",             sh:"ABC / Hulu", shEn:"ABC / Hulu", on:1, dpl:"Agents of S.H.I.E.L.D., Agent Carter, Runaways i inne", den:"Agents of S.H.I.E.L.D., Agent Carter, Runaways and more"},
-  oneshots:{pl:"One-Shoty i mikro-serie",en:"One-Shots & web shorts",sh:"One-Shot", shEn:"One-Shot", on:1, dpl:"krótkie formy z uniwersum MCU", den:"short-form pieces set in the MCU"},
-  wyspy:   {pl:"Samotne wyspy",         en:"Standalone islands",     sh:"samotna wyspa", shEn:"standalone", on:0, dpl:"osobne historie bez wpływu na resztę", den:"self-contained stories with no impact on the rest"},
-  antyki:  {pl:"Antyki (2001–2012)",    en:"Oldies (2001–2012)",     sh:"antyk", shEn:"oldie", on:0, dpl:"filmy i serial sprzed MCU", den:"pre-MCU films and a series"},
-  prehist: {pl:"Prehistoria (1944–98)", en:"Prehistory (1944–98)",   sh:"prehistoria", shEn:"prehistory", on:0, dpl:"seriale kinowe, filmy TV i pierwsze ekranizacje", den:"movie serials, TV films and the first adaptations"},
-  kresk:   {pl:"Kreskówki spoza MCU",   en:"Non-MCU cartoons",       sh:"spoza MCU", shEn:"non-MCU", on:0, dpl:"animacje od 1966 do dziś", den:"animation from 1966 to today"},
-  docs:    {pl:"Dokumenty",             en:"Documentaries",          sh:"", shEn:"", on:0, dpl:"kulisy, making-ofy i przypominajki", den:"behind the scenes, making-ofs and recaps"}
+/* Każdy pakiet ma jedną wagę (w): 1 obowiązkowe, 2 warto, 3 na kiedyś */
+const TIERS = {
+  1:{pl:"Obowiązkowe", en:"Essential", low:"obowiązkowe", lowEn:"essential",
+     dpl:"Trzon historii. Bez tego zgubisz wątek.", den:"The backbone. Skip it and you lose the thread."},
+  2:{pl:"Warto", en:"Worth it", low:"warto", lowEn:"worth it",
+     dpl:"Kanon i łączy się z resztą, ale główną historię zrozumiesz bez tego.", den:"Canon and connected, but you can follow the main story without it."},
+  3:{pl:"Na kiedyś", en:"Someday", low:"na kiedyś", lowEn:"someday",
+     dpl:"Bez wpływu na ciągłość: osobne historie, inne uniwersa i seriale spoza oficjalnej osi MCU.", den:"No effect on continuity: standalone stories, other universes and shows outside the official MCU timeline."}
 };
+const PACKS = {
+  mcu:     {w:1, on:1, pl:"MCU: główna oś", en:"MCU: the main line", sh:"", shEn:"",
+            dpl:"wszystkie filmy kinowe Marvel Studios i seriale, na których budują kolejne filmy, w tym Daredevil: Odrodzenie",
+            den:"every Marvel Studios film plus the series later films build on, including Daredevil: Born Again"},
+  dd:      {w:1, on:1, pl:"Netflix: Daredevil, Defenders, Punisher", en:"Netflix: Daredevil, Defenders, Punisher", sh:"Netflix", shEn:"Netflix",
+            dpl:"oficjalnie na osi MCU w Disney+; Odrodzenie kontynuuje tę historię", den:"officially on the Disney+ MCU timeline; Born Again continues this story"},
+  fox:     {w:1, on:1, pl:"X-Men i Deadpool (Fox)", en:"X-Men & Deadpool (Fox)", sh:"Fox", shEn:"Fox",
+            dpl:"pierwsza trylogia, Pierwsza klasa, Przeszłość, która nadejdzie, Logan i oba Deadpoole", den:"the first trilogy, First Class, Days of Future Past, Logan and both Deadpools"},
+  sony:    {w:1, on:1, pl:"Spider-Man sprzed MCU", en:"Pre-MCU Spider-Man", sh:"Sony", shEn:"Sony",
+            dpl:"trylogia Raimiego i oba filmy Webba", den:"the Raimi trilogy and both Webb films"},
+  mcuplus: {w:2, on:0, pl:"MCU: seriale poboczne", en:"MCU: side series", sh:"", shEn:"",
+            dpl:"Mecenas She-Hulk, Tajna inwazja, Echo, Ironheart, świąteczny specjal Strażników i One-Shot o Mandarynie",
+            den:"She-Hulk, Secret Invasion, Echo, Ironheart, the Guardians Holiday Special and the Mandarin One-Shot"},
+  netflix: {w:2, on:0, pl:"Netflix: Jessica Jones, Luke Cage, Iron Fist", en:"Netflix: Jessica Jones, Luke Cage, Iron Fist", sh:"Netflix", shEn:"Netflix",
+            dpl:"też oficjalnie na osi MCU w Disney+; dopełniają świat Daredevila", den:"also officially on the Disney+ MCU timeline; they round out Daredevil's world"},
+  mcuside: {w:3, on:0, pl:"MCU: osobne historie i inne światy", en:"MCU: standalone stories & other worlds", sh:"", shEn:"",
+            dpl:"What If…?, Moon Knight, Wonder Man, Marvel Zombies, Wilkołak nocą i inne", den:"What If…?, Moon Knight, Wonder Man, Marvel Zombies, Werewolf by Night and more"},
+  foxrest: {w:3, on:0, pl:"X-Men: reszta", en:"X-Men: the rest", sh:"X-Men", shEn:"X-Men",
+            dpl:"pozostałe filmy Foxa i animowani X-Men z 1992 oraz X-Men '97", den:"the remaining Fox films plus the 1992 animated X-Men and X-Men '97"},
+  abc:     {w:3, on:0, pl:"ABC / Hulu / Freeform", en:"ABC / Hulu / Freeform", sh:"ABC / Hulu", shEn:"ABC / Hulu",
+            dpl:"Agenci T.A.R.C.Z.Y., Agentka Carter, Inhumans, Runaways, Cloak & Dagger, Helstrom; poza oficjalną osią MCU",
+            den:"Agents of S.H.I.E.L.D., Agent Carter, Inhumans, Runaways, Cloak & Dagger, Helstrom; outside the official MCU timeline"},
+  oneshots:{w:3, on:0, pl:"One-Shoty i mikro-serie", en:"One-Shots & web shorts", sh:"One-Shot", shEn:"One-Shot",
+            dpl:"krótkie dodatki z czasów Faz 1–3", den:"short extras from Phases 1–3"},
+  ssu:     {w:3, on:0, pl:"Venom i spółka (SSU)", en:"Venom & co. (SSU)", sh:"SSU", shEn:"SSU",
+            dpl:"Venom, Morbius, Madame Web, Kraven; osobne uniwersum Sony", den:"Venom, Morbius, Madame Web, Kraven; Sony's separate universe"},
+  sverse:  {w:3, on:0, pl:"Spider-Verse i Spider-Noir", en:"Spider-Verse & Spider-Noir", sh:"Spider-Verse", shEn:"Spider-Verse",
+            dpl:"animowane Spider-Verse i serial Spider-Noir; inne uniwersa", den:"the animated Spider-Verse and the Spider-Noir series; other universes"},
+  wyspy:   {w:3, on:0, pl:"Samotne wyspy", en:"Standalone islands", sh:"samotna wyspa", shEn:"standalone",
+            dpl:"Legion, The Gifted, M.O.D.O.K., Hit-Monkey", den:"Legion, The Gifted, M.O.D.O.K., Hit-Monkey"},
+  antyki:  {w:3, on:0, pl:"Antyki (1998–2015)", en:"Oldies (1998–2015)", sh:"antyk", shEn:"oldie",
+            dpl:"Blade, Daredevil (2003), Elektra, Fantastyczna Czwórka 2005–2015, Hulk, Punisher, Ghost Rider i serial Mutant X",
+            den:"Blade, Daredevil (2003), Elektra, Fantastic Four 2005–2015, Hulk, Punisher, Ghost Rider and the Mutant X series"},
+  prehist: {w:3, on:0, pl:"Prehistoria (1944–98)", en:"Prehistory (1944–98)", sh:"prehistoria", shEn:"prehistory",
+            dpl:"seriale kinowe, filmy TV i pierwsze ekranizacje", den:"movie serials, TV films and the first adaptations"},
+  kresk:   {w:3, on:0, pl:"Kreskówki spoza MCU", en:"Non-MCU cartoons", sh:"spoza MCU", shEn:"non-MCU",
+            dpl:"animacje od 1966 do dziś", den:"animation from 1966 to today"},
+  docs:    {w:3, on:0, pl:"Dokumenty", en:"Documentaries", sh:"", shEn:"",
+            dpl:"kulisy, making-ofy i przypominajki", den:"behind the scenes, making-ofs and recaps"}
+};
+function packsUpTo(w){ return Object.keys(PACKS).filter(function(k){return PACKS[k].w<=w;}); }
 const PRESETS = [
-  {id:"mcu",  pl:"Samo MCU",            en:"MCU only",              packs:["mcu","oneshots"]},
-  {id:"conn", pl:"Wszystko powiązane",  en:"Everything connected",  packs:["mcu","netflix","fox","sony","ssu","dwcameo","abc","oneshots"]},
-  {id:"all",  pl:"Absolutnie wszystko", en:"Absolutely everything", packs:Object.keys(PACKS)}
+  {id:"t1",  pl:"Obowiązkowe",         en:"Essential",            packs:packsUpTo(1)},
+  {id:"t2",  pl:"Obowiązkowe + warto", en:"Essential + worth it", packs:packsUpTo(2)},
+  {id:"all", pl:"Wszystko",            en:"Everything",           packs:Object.keys(PACKS)}
 ];
 const TYPES = {film:{pl:"Film",en:"Film"}, serial:{pl:"Serial",en:"Series"}, anim:{pl:"Animacja",en:"Animation"},
   special:{pl:"Specjal",en:"Special"}, short:{pl:"Krótki metraż",en:"Short"}, dok:{pl:"Dokument",en:"Documentary"}};
@@ -732,16 +781,24 @@ pl:{
   panelTitle:"Filtry i ustawienia", gSets:"Szybkie zestawy", gPacks:"Pakiety", gFocus:"Zakres", gTypes:"Rodzaje", gNotes:"Notki przy tytułach",
   gStats:"Statystyki", gData:"Twoje dane",
   packSum:function(n,m){return n+" z "+m+" włączone";}, titlesShort:"poz.",
+  presetHint:"Godziny liczone do celu odliczania, w ramach wybranego zakresu i rodzajów.",
+  tierLegend:function(a,b){return "Na liście tytuły obowiązkowe nie mają etykiety. Reszta ma etykietę "+a+" albo "+b+".";},
+  packOn:function(name,tier,n){return "Włącz „"+name+"” ("+tier+", "+n+")";},
+  newTitle:"Nowy podział listy",
+  newBody:["Każdy pakiet ma teraz wagę: obowiązkowe, warto albo na kiedyś. Plan domyślnie pokazuje tylko obowiązkowe, czyli to, bez czego zgubisz wątek.",
+    "Resztę włączysz w filtrach, pakiet po pakiecie. Na liście takie tytuły mają etykietę „warto” albo „na kiedyś”, a szukajka podpowie, w którym pakiecie leży konkretny tytuł.",
+    "Twoje odhaczone pozycje zostały na miejscu."],
+  newOk:"Jasne",
   fAll:"Wszystko z włączonych pakietów", fStar:"Kluczowe przed Doomsday", fOff:"Oficjalna lista Disney+",
   hAll:"Pełna lista z wybranych pakietów.",
-  hStar:"Szersza selekcja tytułów, które najbardziej liczą się przed Avengers: Doomsday. Zawiera całą listę Disney+.",
+  hStar:"Krótsza ścieżka: tytuły, które najbardziej liczą się przed Avengers: Doomsday. Zawiera całą listę Disney+.",
   hOff:"Kolekcja Disney+ „Countdown to Avengers: Doomsday” z sierpnia 2026: 15 tytułów, plus dodany później Endgame: Encore. Loki ma tu dwie pozycje, po jednej na sezon.",
   nOff:"Schowane", nClick:"Na klik", nAll:"Widoczne",
   nHintOff:"Czysta lista, zero opisów.", nHintClick:"Odkrywasz notki pojedynczo — bez ryzyka spoilerów.", nHintAll:"Wszystkie notki widoczne. Są pisane bez spoilerów, ale zdradzają powiązania.",
   noteShort:"Notka", hideWatched:"Ukryj obejrzane", hiddenWatched:"Ten tytuł jest obejrzany, a obejrzane są ukryte.", showNote:"Pokaż notkę", officialTag:"Lista Disney+", starAria:"kluczowe",
   secMark:"Odhacz całą sekcję", secUnmark:"Odznacz całą sekcję",
   empty:"Nic tu nie ma", emptyTxt:"Włącz jakiś pakiet, zmień zakres albo wyczyść wyszukiwanie.", emptyWatched:"Wszystko z tej listy obejrzane — wyłącz „Ukryj obejrzane”, żeby zobaczyć całość.",
-  hiddenHits:function(n){return n+" "+plp(n,"pasujący tytuł jest","pasujące tytuły są","pasujących tytułów jest")+" w wyłączonych pakietach.";}, showAllPacks:"Włącz wszystkie pakiety",
+  hiddenHits:function(n){return n+" "+plp(n,"pasujący tytuł jest","pasujące tytuły są","pasujących tytułów jest")+" w wyłączonych pakietach:";}, showAllPacks:"Włącz wszystkie pakiety",
   toastOn:function(t){return "Odhaczone: "+t;}, toastOff:function(t){return "Odznaczone: "+t;},
   toastBulkOn:function(n){return "Odhaczone: "+n+" "+plp(n,"pozycja","pozycje","pozycji");}, toastBulkOff:function(n){return "Odznaczone: "+n+" "+plp(n,"pozycja","pozycje","pozycji");},
   undo:"Cofnij", sumTxt:function(r,pd){return "Zostało <b>"+r+" h</b>, czyli <b>"+pd+" h dziennie</b>";}, sumDone:"Plan do celu zrobiony",
@@ -762,7 +819,7 @@ pl:{
   discTitle:"Zanim zaczniesz", discOk:"OK, rozumiem", discLang:"English",
   disc:["MarvelBinge Tracker to niekomercyjny projekt fanowski: pomaga ogarnąć, co i w jakiej kolejności obejrzeć. Nie jest powiązany z Marvel Studios ani The Walt Disney Company, nie jest przez nie autoryzowany, a autor nie zarabia na nim ani złotówki. Nazwy i znaki towarowe należą do ich właścicieli.",
         "Strona nie używa ciasteczek ani zewnętrznych skryptów. Twoje odhaczenia zostają w tej przeglądarce."],
-  aboutMore:["Kolejność polecana to premiery MCU z pakietami wpiętymi tam, gdzie dają najwięcej frajdy. ★ oznacza tytuły kluczowe przed Avengers: Doomsday, a znacznik „Lista Disney+” — oficjalną kolekcję Disney+.",
+  aboutMore:["Kolejność polecana to premiery MCU z pakietami wpiętymi tam, gdzie dają najwięcej frajdy. ★ oznacza tytuły kluczowe przed Avengers: Doomsday, a znacznik „Lista Disney+” — oficjalną kolekcję Disney+. Każdy pakiet ma wagę: obowiązkowe, warto albo na kiedyś. Domyślnie włączone są tylko obowiązkowe.",
         "Daty to pierwsza emisja (zwykle w USA), czasy trwania są przybliżone. Stan na 19 listopada 2026 — przyszłe daty mogą się zmienić."],
   foot:["Daty premier to pierwsza emisja (zwykle w USA); czasy trwania są przybliżone. Stan na 19 listopada 2026 — przyszłe daty mogą się zmienić.",
         "MarvelBinge Tracker to niekomercyjny projekt fanowski. Nie jest powiązany z Marvel Studios, The Walt Disney Company ani żadnym powiązanym podmiotem i nie jest przez nie wspierany ani autoryzowany. Wszystkie nazwy, tytuły i znaki towarowe należą do ich właścicieli i służą wyłącznie celom informacyjnym. Autor nie czerpie z projektu żadnych dochodów."]
@@ -787,16 +844,24 @@ en:{
   panelTitle:"Filters & settings", gSets:"Quick sets", gPacks:"Packs", gFocus:"Focus", gTypes:"Types", gNotes:"Per-title notes",
   gStats:"Stats", gData:"Your data",
   packSum:function(n,m){return n+" of "+m+" on";}, titlesShort:"titles",
-  fAll:"Everything in your packs", fStar:"Doomsday essentials", fOff:"Official Disney+ list",
+  presetHint:"Hours count up to your countdown target, within your focus and types.",
+  tierLegend:function(a,b){return "In the list, essential titles have no label. Everything else is marked "+a+" or "+b+".";},
+  packOn:function(name,tier,n){return "Turn on “"+name+"” ("+tier+", "+n+")";},
+  newTitle:"A new way to split the list",
+  newBody:["Every pack now has a weight: essential, worth it or someday. By default the plan shows only the essentials — the things you can't skip without losing the thread.",
+    "Turn the rest on in the filters, pack by pack. In the list those titles are labeled “worth it” or “someday”, and search tells you which pack a title lives in.",
+    "Everything you've checked off is still there."],
+  newOk:"Got it",
+  fAll:"Everything in your packs", fStar:"Key before Doomsday", fOff:"Official Disney+ list",
   hAll:"The full list from the packs you picked.",
-  hStar:"A broader pick of the titles that matter most before Avengers: Doomsday. It includes the whole Disney+ list.",
+  hStar:"The short path: the titles that matter most before Avengers: Doomsday. It includes the whole Disney+ list.",
   hOff:"Disney+'s “Countdown to Avengers: Doomsday” collection from August 2026: 15 titles, plus the later-added Endgame: Encore. Loki takes two rows, one per season.",
   nOff:"Hidden", nClick:"On tap", nAll:"Visible",
   nHintOff:"A clean list, no descriptions.", nHintClick:"Reveal notes one at a time — no spoiler risk.", nHintAll:"All notes visible. They're spoiler-free, but they do reveal connections.",
-  noteShort:"Note", hideWatched:"Hide watched", hiddenWatched:"That title is watched, and watched titles are hidden.", showNote:"Show note", officialTag:"Disney+ list", starAria:"essential",
+  noteShort:"Note", hideWatched:"Hide watched", hiddenWatched:"That title is watched, and watched titles are hidden.", showNote:"Show note", officialTag:"Disney+ list", starAria:"key",
   secMark:"Mark the whole section", secUnmark:"Unmark the whole section",
   empty:"Nothing here", emptyTxt:"Turn on a pack, change the focus or clear the search.", emptyWatched:"You've watched everything in this list — turn off “Hide watched” to see it all.",
-  hiddenHits:function(n){return n+" matching "+(n===1?"title is":"titles are")+" in packs that are off.";}, showAllPacks:"Turn on all packs",
+  hiddenHits:function(n){return n+" matching "+(n===1?"title is":"titles are")+" in packs that are off:";}, showAllPacks:"Turn on all packs",
   toastOn:function(t){return "Watched: "+t;}, toastOff:function(t){return "Unmarked: "+t;},
   toastBulkOn:function(n){return "Marked "+n+" "+(n===1?"title":"titles");}, toastBulkOff:function(n){return "Unmarked "+n+" "+(n===1?"title":"titles");},
   undo:"Undo", sumTxt:function(r,pd){return "<b>"+r+" h</b> to go, <b>"+pd+" h a day</b>";}, sumDone:"Plan complete",
@@ -817,7 +882,7 @@ en:{
   discTitle:"Before you start", discOk:"Got it", discLang:"Polski",
   disc:["MarvelBinge Tracker is a non-commercial fan project: it helps you figure out what to watch and in what order. It is not affiliated with or authorized by Marvel Studios or The Walt Disney Company, and the author earns no money from it. All names and trademarks belong to their respective owners.",
         "The site uses no cookies and no third-party scripts. Your checkmarks stay in this browser."],
-  aboutMore:["The recommended order is the MCU release order with the extra packs slotted in where they pay off best. ★ marks the essentials before Avengers: Doomsday, and the “Disney+ list” tag marks Disney+'s official collection.",
+  aboutMore:["The recommended order is the MCU release order with the extra packs slotted in where they pay off best. ★ marks the essentials before Avengers: Doomsday, and the “Disney+ list” tag marks Disney+'s official collection. Every pack has a weight — essential, worth it or someday — and only the essentials are on by default.",
         "Dates are first releases (usually in the US) and runtimes are approximate. As of November 19, 2026 — future dates may change."],
   foot:["Release dates are first releases (usually in the US); runtimes are approximate. As of November 19, 2026 — future dates may change.",
         "MarvelBinge Tracker is a non-commercial fan project. It is not affiliated with, endorsed by, or authorized by Marvel Studios, The Walt Disney Company, or any related entity. All names, titles, and trademarks belong to their respective owners and are used for informational purposes only. The author earns no revenue from this project."]
@@ -858,6 +923,9 @@ function tSub(i){return state.lang==="en"?i.subEn:i.sub;}
 function tNote(i){return state.lang==="en"?i.nEn:i.n;}
 function tUp(i){return state.lang==="en"?i.upEn:i.up;}
 function tSec(id){const s=SEC.get(id);return s?s[state.lang]:id;}
+function packSh(i){const p=PACKS[i.pack];return state.lang==="en"?p.shEn:p.sh;}
+function tierWord(w){const T=TIERS[w];return state.lang==="en"?T.lowEn:T.low;}
+function tierTag(i){const w=PACKS[i.pack].w;return w>1?'<span class="tag t'+w+'">'+esc(tierWord(w))+'</span>':"";}
 function fold(s){return String(s).toLowerCase().replace(/ł/g,"l").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g," ").trim();}
 const ICON_STAR='<svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.6l2.9 6.1 6.7.8-4.9 4.6 1.3 6.6L12 17.4l-5.9 3.3 1.3-6.6L2.4 9.5l6.7-.8z"/></svg>';
 const ICON_CHEV='<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4"/></svg>';
@@ -874,7 +942,7 @@ const state={ mode:"rec", lang:"pl", packs:{}, focus:"all", types:{}, fhide:fals
 for(const k in PACKS) state.packs[k]=!!PACKS[k].on;
 for(const k in TYPES) state.types[k]=true;
 const revealed=new Set();
-let query="";
+let query="", t3Open=null, migrated=false;
 const store={
   async get(k){ try{ if(window.storage){ const r=await window.storage.get(k); if(r&&r.value) return r.value; } }catch(e){}
     try{ return localStorage.getItem(k); }catch(e){} return null; },
@@ -882,7 +950,7 @@ const store={
     try{ localStorage.setItem(k,v); }catch(e){} }
 };
 function payload(){
-  return {v:2, mode:state.mode, lang:state.lang, packs:state.packs, fstar:state.focus==="star", focus:state.focus,
+  return {v:3, mode:state.mode, lang:state.lang, packs:state.packs, fstar:state.focus==="star", focus:state.focus,
     types:Object.keys(TYPES).filter(function(k){return state.types[k];}), fhide:state.fhide, notes:state.notes,
     target:state.target, customDate:state.customDate, theme:state.theme, col:Array.from(state.col),
     w:Array.from(state.w), wt:state.wt};
@@ -896,7 +964,15 @@ function applySaved(s){
   if(!s||typeof s!=="object") return;
   if(s.mode==="rec"||s.mode==="prem"||s.mode==="chr") state.mode=s.mode;
   if(s.lang==="pl"||s.lang==="en") state.lang=s.lang;
-  if(s.packs&&typeof s.packs==="object") for(const k in state.packs) if(k in s.packs) state.packs[k]=!!s.packs[k];
+  if(s.packs&&typeof s.packs==="object"){
+    if((+s.v||0)>=3){ for(const k in state.packs) if(k in s.packs) state.packs[k]=!!s.packs[k]; }
+    else {
+      // zapis sprzed podziału na wagi: nowe domyślne (obowiązkowe) + dodatki, które ktoś sam włączył i których treść się nie zmieniła
+      for(const k in PACKS) state.packs[k]=!!PACKS[k].on;
+      ["prehist","antyki","kresk","docs","wyspy"].forEach(function(k){ if(s.packs[k]) state.packs[k]=true; });
+      migrated=true;
+    }
+  }
   if(s.focus==="all"||s.focus==="star"||s.focus==="off") state.focus=s.focus; else if(s.fstar) state.focus="star";
   if(Array.isArray(s.types)&&s.types.length){ for(const k in state.types) state.types[k]=s.types.indexOf(k)>=0; }
   state.fhide=!!s.fhide;
@@ -995,7 +1071,7 @@ function renderNext(P){
     return;
   }
   const i=Q[0], sub=tSub(i), note=tNote(i);
-  let meta='<span>'+esc(i.y)+'</span><span>'+esc(TYPES[i.typ][state.lang])+'</span>'+(i.pack!=="mcu"?'<span>'+esc(PACKS[i.pack][state.lang])+'</span>':"")+'<span>'+fmtH(i.h)+'</span>'+
+  let meta='<span>'+esc(i.y)+'</span><span>'+esc(TYPES[i.typ][state.lang])+'</span>'+(packSh(i)?'<span>'+esc(packSh(i))+'</span>':"")+(PACKS[i.pack].w>1?'<span class="tier t'+PACKS[i.pack].w+'">'+esc(tierWord(PACKS[i.pack].w))+'</span>':"")+'<span>'+fmtH(i.h)+'</span>'+
     (i.star?'<span class="cap-star">'+ICON_STAR+esc(t.starAria)+'</span>':"")+(i.off?'<span>'+esc(t.officialTag)+'</span>':"");
   let html='<div class="cap" data-id="'+i.id+'"><div class="cap-lbl">'+esc(t.nextLbl)+'</div>'+
     '<div class="cap-title">'+escT(i.t)+(sub?' <span style="font-family:var(--f-text);font-size:.9rem;font-weight:600">'+esc(sub)+'</span>':"")+'</div>'+
@@ -1016,8 +1092,9 @@ function renderNext(P){
 function itemHTML(i){
   const t=L(), done=state.w.has(i.id), sub=tSub(i), note=tNote(i);
   let meta='<span>'+esc(i.y)+'</span><span>'+esc(TYPES[i.typ][state.lang])+'</span>';
-  const pk=state.lang==="en"?PACKS[i.pack].shEn:PACKS[i.pack].sh;
-  if(i.pack!=="mcu"&&pk) meta+='<span class="pk">'+esc(pk)+'</span>';
+  const pk=packSh(i);
+  if(pk) meta+='<span class="pk">'+esc(pk)+'</span>';
+  meta+=tierTag(i);
   if(i.off) meta+='<span class="tag off">'+esc(t.officialTag)+'</span>';
   if(!isOut(i)){
     const up=tUp(i);
@@ -1057,8 +1134,12 @@ function renderList(){
   if(state.fhide) shown=shown.filter(function(i){return !state.w.has(i.id);});
   let html="";
   if(f){
-    const hidden=DATA.filter(function(i){return !inPacks(i)&&matches(i,f);}).length;
-    if(hidden) html+='<div class="hidden-hits"><span>'+esc(t.hiddenHits(hidden))+'</span><button class="linkbtn" data-act="all-packs">'+esc(t.showAllPacks)+'</button></div>';
+    const hid=DATA.filter(function(i){return !inPacks(i)&&matches(i,f);});
+    if(hid.length){
+      const cnt={}; hid.forEach(function(i){cnt[i.pack]=(cnt[i.pack]||0)+1;});
+      html+='<div class="hidden-hits"><span>'+esc(t.hiddenHits(hid.length))+'</span>'+Object.keys(cnt).map(function(k){
+        return '<button class="linkbtn" data-act="pack-on" data-k="'+k+'">'+esc(t.packOn(PACKS[k][state.lang],tierWord(PACKS[k].w),cnt[k]))+'</button>';}).join("")+'</div>';
+    }
   }
   if(!shown.length){
     const allWatched=state.fhide&&B.length&&!f;
@@ -1092,18 +1173,30 @@ function setIndeterminate(){
 /* ================= RENDER: PANEL ================= */
 function renderPanel(){
   const t=L();
-  // zestawy
+  // zestawy (z godzinami do celu)
+  const ty=targetYmd();
   $("presets").innerHTML=PRESETS.map(function(p){
     const on=Object.keys(PACKS).every(function(k){return state.packs[k]===(p.packs.indexOf(k)>=0);});
-    return '<button class="pill" data-act="preset" data-p="'+p.id+'" aria-pressed="'+on+'">'+esc(p[state.lang])+'</button>';}).join("");
-  // pakiety
+    const h=sumH(DATA.filter(function(i){return p.packs.indexOf(i.pack)>=0&&inFocus(i)&&inTypes(i)&&dSort(i.d)<=ty;}));
+    return '<button class="pill" data-act="preset" data-p="'+p.id+'" aria-pressed="'+on+'">'+esc(p[state.lang])+'<small>'+num(Math.round(h))+'&nbsp;h</small></button>';}).join("");
+  // pakiety, pogrupowane według wagi
   const keys=Object.keys(PACKS);
-  $("packs").innerHTML=keys.map(function(k){
+  function packBtn(k){
     const p=PACKS[k], its=DATA.filter(function(i){return i.pack===k;});
     return '<button class="pack" data-act="pack" data-k="'+k+'" aria-pressed="'+state.packs[k]+'" style="--c:var(--p-'+k+')">'+
       '<span class="sw" aria-hidden="true"></span><span class="pack-name">'+esc(p[state.lang])+'</span>'+
       '<span class="pack-num">'+its.length+'&nbsp;'+esc(t.titlesShort)+'<br>'+num(sumH(its))+'&nbsp;h</span>'+
-      '<span class="pack-desc">'+esc(state.lang==="en"?p.den:p.dpl)+'</span></button>';}).join("");
+      '<span class="pack-desc">'+esc(state.lang==="en"?p.den:p.dpl)+'</span></button>';
+  }
+  $("packs").innerHTML=[1,2,3].map(function(w){
+    const T=TIERS[w], ks=keys.filter(function(k){return PACKS[k].w===w;}), on=ks.filter(function(k){return state.packs[k];}).length;
+    const head='<span>'+esc(T[state.lang])+'</span><small>'+on+'/'+ks.length+'</small>';
+    const inner='<p class="tier-desc">'+esc(state.lang==="en"?T.den:T.dpl)+'</p>'+ks.map(packBtn).join("");
+    if(w<3) return '<div class="tier"><div class="tier-h">'+head+'</div>'+inner+'</div>';
+    const open=t3Open===null?on>0:t3Open;
+    return '<details class="tier" id="tier3"'+(open?" open":"")+'><summary class="tier-h">'+head+ICON_CHEV+'</summary>'+inner+'</details>';
+  }).join("");
+  $("tierLegend").innerHTML=t.tierLegend('<span class="tag t2">'+esc(tierWord(2))+'</span>','<span class="tag t3">'+esc(tierWord(3))+'</span>');
   $("packSum").textContent=t.packSum(keys.filter(function(k){return state.packs[k];}).length,keys.length);
   // zakres
   const inP=DATA.filter(inPacks);
@@ -1273,6 +1366,11 @@ function showDisclaimer(first){
   ],first?function(){ try{localStorage.setItem(DKEY,"1");}catch(e){} }:null);
 }
 
+function showWhatsNew(){
+  const t=L();
+  modal(t.newTitle,t.newBody.map(function(p){return "<p>"+esc(p)+"</p>";}).join(""),[{label:t.newOk,primary:true}]);
+}
+
 /* ================= KOPIA / LINK ================= */
 function b64e(str){return btoa(unescape(encodeURIComponent(str))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");}
 function b64d(s){s=s.replace(/-/g,"+").replace(/_/g,"/");while(s.length%4)s+="=";return decodeURIComponent(escape(atob(s)));}
@@ -1313,7 +1411,7 @@ document.addEventListener("click",function(e){
     case "mode": state.mode=el.getAttribute("data-m"); save(); renderAll(); break;
     case "preset": { const p=PRESETS.find(function(x){return x.id===el.getAttribute("data-p");}); for(const k in state.packs) state.packs[k]=p.packs.indexOf(k)>=0; save(); renderAll(); break; }
     case "pack": { const k=el.getAttribute("data-k"); state.packs[k]=!state.packs[k]; save(); renderAll(); break; }
-    case "all-packs": for(const k in state.packs) state.packs[k]=true; save(); renderAll(); break;
+    case "pack-on": { const k=el.getAttribute("data-k"); if(k in state.packs){ state.packs[k]=true; save(); renderAll(); } break; }
     case "focus": state.focus=el.getAttribute("data-f"); save(); renderAll(); break;
     case "type": { const k=el.getAttribute("data-t"); state.types[k]=!state.types[k]; if(!Object.keys(TYPES).some(function(x){return state.types[x];})) state.types[k]=true; save(); renderAll(); break; }
     case "notes": state.notes=el.getAttribute("data-n"); save(); renderAll(); break;
@@ -1352,6 +1450,7 @@ $("themeBtn").addEventListener("click",function(){ state.theme=state.theme==="au
 $("aboutBtn").addEventListener("click",function(){ showDisclaimer(false); });
 $("openPanel").addEventListener("click",openPanel);
 $("closePanel").addEventListener("click",closePanel);
+$("packs").addEventListener("toggle",function(e){ if(e.target&&e.target.id==="tier3") t3Open=e.target.open; },true);
 $("scrim").addEventListener("click",closePanel);
 $("count").addEventListener("change",function(e){
   if(e.target.id==="tsel"){ state.target=e.target.value; if(state.target==="custom"&&!validCustom()) defaultCustom(); save(); refresh(); if(state.target==="custom"){ const d=$("tdate"); d&&d.focus(); } }
@@ -1399,6 +1498,8 @@ function start(first){
   readHash();
   let seen=false; try{ seen=localStorage.getItem(DKEY)==="1"; }catch(e){}
   if(!seen&&$("modal").hidden) showDisclaimer(true);
+  else if(migrated&&$("modal").hidden) showWhatsNew();
+  if(migrated){ migrated=false; save(); }
 }
 if(document.fonts&&document.fonts.ready) document.fonts.ready.then(function(){ sizeSelect(); measure(); });
 store.get(KEY).then(function(v){ if(v){ try{ applySaved(JSON.parse(v)); }catch(e){} } start(true); });
